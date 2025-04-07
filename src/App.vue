@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <router-link to="/">Homeeee</router-link> |
+    <router-link to="/">Homeeee yarbi tbeddel</router-link> |
     <router-link to="/about">About</router-link>
   </nav>
 <!-- Test  changed again-->
