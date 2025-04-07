@@ -1,12 +1,23 @@
 <template>
-  <div class="home">
+  <div>
+    <button @click="addDocument">Add Document</button>
   </div>
-  <!-- change recheck -->
 </template>
 
-<script>
+<script setup>
+import {db} from '@/Firebase/Config'
+import {collection , addDoc} from 'firebase/firestore'
 
-export default {
-  name: 'HomeView',
+const AddDocument = async () => {
+  try {
+  }
+
+  catch{
+    
+  }
+
 }
+
+
+
 </script>

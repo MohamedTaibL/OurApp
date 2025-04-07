@@ -16,7 +16,7 @@ firebase.initializeApp(firebaseConfig)
 // Step 2 : Init the firestore service
 // If we want to do any communication with the firestore db (eg. add documents)
 // we can use projectFirestore variable
-const projectFirestore = firebase.firestore()
+const db = firebase.firestore()
 //Step 3 : Export projectFirestore
 // This will enable the use the firebase in different components
-export {projectFirestore}
+export {db}
