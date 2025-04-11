@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Hello {{ user.name }}</h1>
+    <h1>Hello</h1>
     <p>Voici les discussions en cours :</p>
     <button @click="addADoc">Ajouter un document</button>
     <DiscussionsLive/>
@@ -9,6 +9,7 @@
 </template>
 
 <script setup>
+/*
 import DiscussionsLive from '@/components/DiscussionsLive.vue'
 import { db , auth } from '@/Firebase/Config'
 import { ref, onMounted } from 'vue'
@@ -30,7 +31,6 @@ onMounted(() => {
   })
 })
 
-/*
 async function addADoc() {
   try{
     let docRef = await db.collection("Discussions").add({
