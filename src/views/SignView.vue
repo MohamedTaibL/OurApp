@@ -1,20 +1,31 @@
 <template>
     <div class="sign-container">
-      <div class="sign-view" v-if="login">
+      <div class="sign-view" v-if="!login">
         <h1>Sign Up</h1>
         <form @submit.prevent="createUser" class="form">
           <input type="email" placeholder="Email" v-model="email" required />
           <input type="password" placeholder="Password" v-model="password" required />
-          <input type="password" placeholder="Confirm Password" v-model="password" required />
+          <input type="password" placeholder="Confirm Password" v-model="confirmpassword" required />
           <input type="text" placeholder="Username" v-model="username" required />
           <input type="text" placeholder="Name" v-model="Name" required />
-          <input type="data" placeholder="Date of Birth" v-model="date" required />
-          <button type="submit" class="btn">Sign Up</button>
+          <input type="date" placeholder="Date of Birth" v-model="date" required />
+          <div class="gender-container">
+            <div>Gender:</div>
+            <label>
+                Male
+                <input type="radio" name="gender" value="male" v-model="gender"/>
+            </label>
+                <label>
+                    Female
+                    <input type="radio" name="gender" value="female" v-model="gender" />
+                </label>
+          </div>
+            <button type="submit" class="btn">Sign Up</button>
+        
+
         </form>
         <button @click="printLogin" class="switch-btn">Already have an account? Login!</button>
-        <button>Login in as a guest</button>
       </div>
-  
       <div class="login-view" v-else>
         <h1>Login</h1>
         <form @submit.prevent="logUser" class="form">
@@ -24,8 +35,8 @@
         </form>
         <button class="switch-btn">Forgot Password?</button>
         <div id = "Create" >
-            <button @click="printLogin" class="btn" style="background-color:green; width:50%">Log in as a guest</button>    
-            <button @click="printLogin" class="btn" style="background-color:red ; width:50%">Create A New Account</button>
+            <button @click="printLogin" class="btn">Log in as <br> A Guest</button>    
+            <button @click="printLogin" class="btn">Create A New Account</button>
         </div>
       </div>
     </div>
@@ -33,7 +44,7 @@
   
   <script setup>
   import { onMounted, ref } from 'vue'
-  import { auth } from '@/Firebase/Config'
+  import { db ,auth } from '@/Firebase/Config'
   import { useRouter } from 'vue-router'
   
   const router = useRouter()
@@ -42,19 +53,76 @@
   const password = ref("")
   const username = ref("")
   const Name = ref("")
+  const confirmpassword = ref("")
+  const date = ref("")
+  const gender = ref("male")
+
+  
   
   async function createUser() {
+    const isValid = await verify()
+    if (!isValid) {
+        console.log("Validation failed")
+      return
+    }
     try {
       await auth.createUserWithEmailAndPassword(email.value, password.value)
-      console.log("User created successfully")
-      router.push('/')
+      await db.collection("users").add({
+        UID: auth.currentUser.uid,
+        username : username.value,
+        name : Name.value,
+        birthdate: date.value,
+        gender : gender.value
+      }).then((docRef) => {
+        console.log("User document created with ID: ", docRef.id)
+      }).catch((error) => {
+        console.error("Error adding user document: ", error)
+      })
+      
     } catch (error) {
       console.error("Error creating user:", error)
     } finally {
       email.value = ''
       password.value = ''
     }
+
+    auth.signOut()
+    console.log("User signed out")
+    login.value = true
+
+    
+
   }
+
+  async function verify() {
+  if (password.value !== confirmpassword.value) {
+    alert("Passwords do not match");
+    return false;
+  }
+  if (password.value.length < 6) {
+    alert("Password must be at least 6 characters long");
+    return false;
+  }
+  if (username.value.length < 3) {
+    alert("Username must be at least 3 characters long");
+    return false;
+  }
+
+  try {
+    // Check if the username already exists in the database
+    const querySnapshot = await db.collection("users").where("username", "==", username.value).get();
+    if (!querySnapshot.empty) {
+      alert("Username already exists");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error checking username: ", error);
+    return false;
+  }
+
+  console.log("Username is available");
+  return true;
+}
   
 
 
@@ -81,16 +149,26 @@
   
 <style scoped>
 
-#Create{
-    display:flex;
-    justify-content: space-between;
-    border-top: 1px solid #ccc; 
-    margin: 1rem 0; 
-    width:60%;
-    padding: 0.5rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+#Create {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #ccc;
+  margin: 1rem 0;
+  width: 100%; /* Increased width */
+  max-width: 600px; /* Optional: Limit the maximum width */
+  
+  gap: 1rem; /* Adds spacing between buttons */
+}
+
+/* Button styling (optional for consistency) */
+#Create .btn {
+  flex: 1; /* Ensures buttons take equal space */
+  text-align: center;
+  width:50%;
+  background: #006a71;
+  animation: gradientAnimation 10s ease infinite;
+
 }
 
 
@@ -104,7 +182,7 @@
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background: linear-gradient(135deg, #24cb11, #d6e819);
+  background: linear-gradient(135deg, rgb(242,239 , 231), #48A6A7);
   background-size: 400% 400%;
   animation: gradientAnimation 10s ease infinite;
   font-family: 'Poppins', sans-serif;
@@ -126,7 +204,7 @@
 
 /* Form container */
 .sign-view, .login-view {
-  background: rgba(255, 255, 255, 0.9);
+  background:  rgba(242, 239, 231, 0.69);
   padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -171,7 +249,7 @@
   max-width: 350px;
   padding: 0.8rem;
   margin-top: 1rem;
-  background: #6a11cb;
+  background: #006a71;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -182,7 +260,6 @@
 }
 
 .btn:hover {
-  background: #2575fc;
   transform: scale(1.05);
 }
 
@@ -190,7 +267,7 @@
   margin-top: 1rem;
   background: none;
   border: none;
-  color: #6a11cb;
+  color: black;
   font-size: 0.9rem;
   font-family: 'Poppins', sans-serif;
   cursor: pointer;
@@ -198,7 +275,8 @@
 }
 
 .switch-btn:hover {
-  color: #2575fc;
+    color: #006a71;
+    text-decoration: none;
 }
 
 /* Headings */
@@ -208,4 +286,42 @@ h1 {
   font-size: 1.8rem;
   font-weight: 600;
 }
+
+
+.gender-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem; /* Adds spacing between the labels */
+  margin-top: 1rem; /* Adds spacing above the gender section */
+  width: 100%; /* Ensures it spans the full width of the form */
+  max-width: 350px; /* Matches the width of the input fields */
+  padding: 0.8rem; /* Matches the padding of input fields */
+  border: 1px solid #ccc; /* Matches the border style of input fields */
+  border-radius: 5px; /* Matches the border radius of input fields */
+  background: #fff; /* Matches the background color of input fields */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for a clean look */
+}
+
+.gender-container div {
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+
+.gender-container label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Adds spacing between the label text and the radio button */
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+
+.gender-container input[type="radio"] {
+  accent-color: #006a71; /* Changes the color of the radio button */
+  cursor: pointer;
+}
+
+
 </style>
