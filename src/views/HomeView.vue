@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Hello {{ user.name }}</h1>
+    <h1>Hello</h1>
     <p>Voici les discussions en cours :</p>
     <button @click="addADoc">Ajouter un document</button>
     <DiscussionsLive/>
@@ -14,7 +14,7 @@ import { db , auth } from '@/Firebase/Config'
 import { ref, onMounted } from 'vue'
 
 // getting the current user
-const userName = ref(null)
+/*const userName = ref(null)
 
 onMounted(() => {
   auth.onAuthStateChanged((user) => {
