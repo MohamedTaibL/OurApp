@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { auth } from '@/Firebase/Config'; // Import Firebase authentication
 
 const routes = [
   {
@@ -26,5 +27,16 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  const user = auth.currentUser;
+
+  // Protect routes that should only be accessed by authenticated users
+  if (to.path !== '/sign' && !user) {
+    next('/sign');  // Redirect to sign-in page if not authenticated
+  } else {
+    next();  // Proceed to the requested route
+  }
+});
 
 export default router
