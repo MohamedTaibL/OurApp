@@ -6,17 +6,7 @@
 </template>
 
 <script setup>
-import { auth , db} from '@/Firebase/Config'
-import { useRouter } from 'vue-router'
-
-auth.onAuthStateChanged((user) => {
-  if (!user) {
-    const router = useRouter()
-    router.push('/sign')
-  } else {
-    console.log("User is signed in:", user.email);
-  }
-});
+import {db} from '@/Firebase/Config'
 
 function readDocs() {
   db.collection("Discussions")
