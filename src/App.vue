@@ -10,16 +10,19 @@
 <script setup>
 import { auth } from '@/Firebase/Config'
 import { useRouter } from 'vue-router'
+import { onMounted } from 'vue';
 
 const router = useRouter()
 
-auth.onAuthStateChanged((user) => {
+onMounted (() => {auth.onAuthStateChanged((user) => {
   if (!user) {
-    router.push('/sign')
+    router.push('/sign');
+    console.log("I'm mounted");
   } else {
     console.log("User is signed in:", user.email);
+    console.log("I'm mounted");
   }
-});
+})});
 
 </script>
 
