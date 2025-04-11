@@ -1,12 +1,10 @@
 <template>
-  <nav v-if="$route.path !== '/sign'">
-    <router-link to="/">Homeeee yarbi tbeddel</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
+  <NavBar/>
   <router-view/>
 </template>
 
 <script setup>
+import NavBar from './components/NavBar.vue';
 </script>
 
 <style>
