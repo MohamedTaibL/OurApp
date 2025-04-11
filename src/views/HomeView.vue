@@ -3,24 +3,13 @@
     <button @click="addADoc">Add Document</button>
     <button @click="readDocs">Read Documents</button>
   </div>
+  <DiscussionsLive/>
 </template>
 
 <script setup>
-import {db} from '@/Firebase/Config'
+import DiscussionsLive from '@/components/DiscussionsLive.vue'
 
-function readDocs() {
-  db.collection("Discussions")
-    .get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} =>`, doc.data());
-      });
-    })
-    .catch((error) => {
-      console.error("Error reading documents:", error);
-    });
-}
-
+/*
 async function addADoc() {
   try{
     let docRef = await db.collection("Discussions").add({
@@ -38,5 +27,5 @@ async function addADoc() {
     console.log("There was an error!");
 
   }
-}
+}*/
 </script>
