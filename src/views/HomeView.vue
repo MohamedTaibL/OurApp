@@ -7,10 +7,14 @@
 
 <script setup>
 import { auth , db} from '@/Firebase/Config'
+import { useRouter } from 'vue-router'
 
 auth.onAuthStateChanged((user) => {
   if (!user) {
-    this.$router.push("/sign");
+    const router = useRouter()
+    router.push('/sign')
+  } else {
+    console.log("User is signed in:", user.email);
   }
 });
 
