@@ -1,6 +1,6 @@
 <template>
     <div class="sign-container">
-      <div class="sign-view" v-if="!login">
+      <div class="sign-view" v-if="login">
         <h1>Sign Up</h1>
         <form @submit.prevent="createUser" class="form">
           <input type="email" placeholder="Email" v-model="email" required />
@@ -8,19 +8,25 @@
           <input type="password" placeholder="Confirm Password" v-model="password" required />
           <input type="text" placeholder="Username" v-model="username" required />
           <input type="text" placeholder="Name" v-model="Name" required />
+          <input type="data" placeholder="Date of Birth" v-model="date" required />
           <button type="submit" class="btn">Sign Up</button>
         </form>
         <button @click="printLogin" class="switch-btn">Already have an account? Login!</button>
+        <button>Login in as a guest</button>
       </div>
   
       <div class="login-view" v-else>
         <h1>Login</h1>
-        <form @submit.prevent="createUser" class="form">
+        <form @submit.prevent="logUser" class="form">
           <input type="email" placeholder="Email" v-model="email" required />
           <input type="password" placeholder="Password" v-model="password" required />
           <button type="submit" class="btn">Login</button>
         </form>
-        <button @click="printLogin" class="switch-btn">Don't have an account? Sign Up!</button>
+        <button class="switch-btn">Forgot Password?</button>
+        <div id = "Create" >
+            <button @click="printLogin" class="btn" style="background-color:green; width:50%">Log in as a guest</button>    
+            <button @click="printLogin" class="btn" style="background-color:red ; width:50%">Create A New Account</button>
+        </div>
       </div>
     </div>
   </template>
@@ -50,6 +56,20 @@
     }
   }
   
+
+
+  async function logUser(){
+    try {
+        await auth.signInWithEmailAndPassword(email.value, password.value)
+        console.log("User logged in successfully")
+        router.push('/')
+    } catch (error) {
+        console.error("Error logging in:", error)
+    } finally {
+        email.value = ''
+        password.value = ''
+    }
+  }
   onMounted(() => {
     login.value = false
   })
@@ -59,7 +79,21 @@
   }
   </script>
   
-  <style scoped>
+<style scoped>
+
+#Create{
+    display:flex;
+    justify-content: space-between;
+    border-top: 1px solid #ccc; 
+    margin: 1rem 0; 
+    width:60%;
+    padding: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
 /* Import Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
@@ -69,10 +103,12 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+  width: 100vw;
   background: linear-gradient(135deg, #24cb11, #d6e819);
   background-size: 400% 400%;
   animation: gradientAnimation 10s ease infinite;
   font-family: 'Poppins', sans-serif;
+
 }
 
 /* Gradient animation */
