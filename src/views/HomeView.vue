@@ -1,13 +1,34 @@
 <template>
   <div>
-    <button @click="addADoc">Add Document</button>
-    <button @click="readDocs">Read Documents</button>
+    <h1>Hello {{ user.name }}</h1>
+    <p>Voici les discussions en cours :</p>
+    <button @click="addADoc">Ajouter un document</button>
+    <DiscussionsLive/>
   </div>
   <DiscussionsLive/>
 </template>
 
 <script setup>
 import DiscussionsLive from '@/components/DiscussionsLive.vue'
+import { db , auth } from '@/Firebase/Config'
+import { ref, onMounted } from 'vue'
+
+// getting the current user
+const userName = ref(null)
+
+onMounted(() => {
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      userId.value = user.uid
+      userName.value = user.displayName
+      userEmail.value = user.email
+      userPhoto.value = user.photoURL
+      user.value = { id: userId.value, name: userName.value, email: userEmail.value, photo: userPhoto.value }
+    } else {
+      console.log("No user is signed in")
+    }
+  })
+})
 
 /*
 async function addADoc() {
