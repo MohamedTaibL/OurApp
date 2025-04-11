@@ -8,6 +8,8 @@
 <script setup>
 import {db} from '@/Firebase/Config'
 
+
+
 function readDocs() {
   db.collection("Discussions")
     .get()
@@ -38,5 +40,7 @@ async function addADoc() {
     console.log("There was an error!");
 
   }
+
+
 }
 </script>
