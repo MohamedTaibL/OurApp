@@ -6,7 +6,13 @@
 </template>
 
 <script setup>
-import { db } from '@/Firebase/Config'
+import { auth , db} from '@/Firebase/Config'
+
+auth.onAuthStateChanged((user) => {
+  if (!user) {
+    this.$router.push("/sign");
+  }
+});
 
 function readDocs() {
   db.collection("Discussions")
