@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 
 import 'firebase/firestore'
+import 'firebase/auth'
 
 const firebaseConfig = {
     apiKey: "AIzaSyDIX0rn8kY-34hJ_Z7AHTI4iu8LBrsmXHo",
@@ -13,10 +14,12 @@ const firebaseConfig = {
 
 
 firebase.initializeApp(firebaseConfig)
+
 // Step 2 : Init the firestore service
 // If we want to do any communication with the firestore db (eg. add documents)
 // we can use projectFirestore variable
 const db = firebase.firestore()
+const auth = firebase.auth()
 //Step 3 : Export projectFirestore
 // This will enable the use the firebase in different components
-export {db}
+export {auth , db}
