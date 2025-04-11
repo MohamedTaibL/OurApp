@@ -1,11 +1,27 @@
 <template>
-  <nav>
+  <nav v-if="$route.path !== '/sign'">
     <router-link to="/">Homeeee yarbi tbeddel</router-link> |
     <router-link to="/about">About</router-link>
   </nav>
 <!-- Test  changed again-->
 <router-view/>
 </template>
+
+<script setup>
+import { auth } from '@/Firebase/Config'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+auth.onAuthStateChanged((user) => {
+  if (!user) {
+    router.push('/sign')
+  } else {
+    console.log("User is signed in:", user.email);
+  }
+});
+
+</script>
 
 <style>
 #app {
