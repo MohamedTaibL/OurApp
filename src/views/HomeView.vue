@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1>Hello {{}}</h1>
-    <p>Voici les discussions en cours :</p>
+    <h1>Hello {{ userName }}</h1>
     <DiscussionsLive />
   </div>
 </template>
@@ -31,11 +30,9 @@ onMounted(() => {
       if (user.isAnonymous) {
         userName.value = "Guest";
       } else {
-        // if the user is not a guest we get his name from the db using his uid
-        console.log("User is signed in: ", user.uid);
+        // getting the user name from the db using his uid
+        userName.value = await getUserName(user.uid); // getting the user name from the db using his uid
       }
-      // getting the user name from the db using his uid
-      userName.value = await getUserName(user.uid); // getting the user name from the db using his uid
     } else {
       console.log("No user is signed in.");
     }
