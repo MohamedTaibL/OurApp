@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>Hello {{ userName }}</h1>
+  <div class="home-view"> 
+    <h1>Hello {{ userName }} :)</h1>
     <DiscussionsLive />
   </div>
 </template>
@@ -39,3 +39,24 @@ onMounted(() => {
   });
 });
 </script>
+
+<style scoped>
+.home-view {
+  background: linear-gradient(135deg, rgb(242, 239, 231), #48A6A7); /* Gradient background */
+  animation: gradientAnimation 10s ease infinite;
+  
+  /* Gradient animation */
+  @keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+}
+</style>

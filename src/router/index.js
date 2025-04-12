@@ -33,7 +33,8 @@ const routes = [
     // Page de discussion
     path: '/discussion/:id',
     name: 'discussion',
-    component: () => import(/* webpackChunkName: "discussion" */ '../views/DiscussionView.vue')
+    component: () => import(/* webpackChunkName: "discussion" */ '../views/DiscussionView.vue'),
+    props: true // Pass route params as props to the component
   },
   {
     // Page de création de discussion 
