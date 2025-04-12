@@ -182,8 +182,7 @@ onMounted(async () => {
   background: rgba(242, 239, 231, 0.69);
   border-radius: 8px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 800px;
+  width: 800px;
   margin: 0 auto;
   font-family: "Poppins", sans-serif;
   cursor: pointer;

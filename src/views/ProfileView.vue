@@ -1,4 +1,5 @@
 <template>
+  <div class="profile-view">
     <div class="profile-container" v-if="!editProfile">
       <!-- Parameters Icon in the Top-Right -->
       <div class="top-right-settings">
@@ -45,23 +46,7 @@
           Saves
         </button>
       </div>
-
-      <div class="profile-content">
-        <!-- Posts Section -->
-        <div v-if="activeTab === 'posts'">
-          <h3>Here we will add the input field for adding new posts, and then we will display each previously made posts</h3>
-          <!-- Add your posts content here -->
-        </div>
-
-        <!-- Saves Section -->
-        <div v-else-if="activeTab === 'saves'">
-          <h3>We will show saved posts for the if the profile Owner id matches the authentication current user id, allowing the user to also delete the saved posts if they wish </h3>
-          <!-- Add your saves content here -->
-        </div>
-      </div>
     </div>
-
-
     <!-- Add your edit profile modal here if needed -->
      <div v-else >
          <h3>Here we will add the input field for editing the profil</h3>
@@ -70,14 +55,31 @@
 
         <button @click="ShowOrHideEdits"> Go back</button>
      </div>
+
+      <div class="profile-content profile-container profile-posts">
+          <!-- Posts Section -->
+          <div v-if="activeTab === 'posts'">
+            <DiscussionsLive :userId="userId" /> <!-- Pass the userId prop to DiscussionsLive -->
+            <!-- Add your posts content here -->
+          </div>
+
+          <!-- Saves Section -->
+          <div v-else-if="activeTab === 'saves'">
+            <h3>We will show saved posts for the if the profile Owner id matches the authentication current user id, allowing the user to also delete the saved posts if they wish </h3>
+            <!-- Add your saves content here -->
+          </div>
+      </div>
+    </div>
   </template>
 
 
 <script setup>
 import { db, auth } from '@/Firebase/Config';
 import { useRouter } from 'vue-router';
-import { onMounted, ref, watch} from 'vue';
-import { useRoute } from 'vue-router'
+import { onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import DiscussionsLive from '@/components/DiscussionsLive.vue'; // Import the DiscussionsLive component
+
 
 const imgpicture = ref('');
 const Name = ref('');
@@ -163,7 +165,7 @@ onMounted(() => {
 /* Profile Container */
 .profile-container {
   position: relative;
-  max-width: 700px;
+  max-width: 900px;
   margin: 40px auto;
   padding: 30px;
   background-color: #ffffff;
@@ -197,6 +199,14 @@ onMounted(() => {
   display: flex;
   align-items: flex-start;
   gap: 30px;
+}
+
+.profile-posts {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 /* Left Section: Profile Picture and Details */
