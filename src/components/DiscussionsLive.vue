@@ -4,8 +4,8 @@
       <button class="btn btn-primary">Create Discussion</button>
     </router-link>
     <div class="user-icon">
-      <img :src="icon.value" alt="User Icon" v-if="icon.value"/>
-      <p>@{{ userName }}</p>
+      <img :src="icon.value" alt="User Icon" v-if="icon"/>
+      <p>@{{ userName.value }}</p>
     </div>
   </div>
   <div class="discussions-container">
@@ -56,14 +56,17 @@ onMounted(() => {
     .catch((error) => {
       console.error("Error getting discussions: ", error);
     });
+
   auth.onAuthStateChanged(async (user) => {
     if (user && !user.isAnonymous) {
       userData.value = await getUserData(user.uid); // getting the user icon from the db using his uid
-      userName.value = userData.value.name; // getting the user name from the db using his uid
-      icon.value = userData.value.icon; // getting the user icon from the db using his uid
+      icon.value = userData.value?.icon || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+      userName.value = userData.value?.name || "-Guest-";
     } else {
       console.log("No user is signed in.");
     }
   });
+
+  console.log("user icon link -------> ", icon.value); // getting the user icon from the db
 });
 </script>
