@@ -178,10 +178,9 @@ async function logUser() {
     console.log("User logged in successfully");
     router.push('/'); // Redirect to the home page
   } catch (error) {
-    console.error("Error logging in:", error);
+    alert("Error Logging In, verify your credentials.");
 
   } finally {
-    email.value = '';
     password.value = '';
   }
 }
