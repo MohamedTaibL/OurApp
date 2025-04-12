@@ -35,13 +35,13 @@
         </form>
         <button @click="printResetPass"class="switch-btn">Forgot Password?</button>
         <div id = "Create" >
-            <button class="btn">Log in as <br> A Guest</button>    
+            <button @click="loginGuest" class="btn">Log in as <br> A Guest</button>    
             <button @click="printSignUp" class="btn">Create A New Account</button>
         </div>
       </div>
 
       <div>
-        <div v-if="resetpass" class="sign-view">
+        <div  class="sign-view" v-if="resetpass">
           <h1>Reset Password</h1>
           <form @submit.prevent="resetPassword" class="form">
             <input type="email" placeholder="Email" v-model="email" required />
@@ -189,8 +189,25 @@
     email.value = ""
     router.push('/sign')
     printLogin()
+  }}
+
+
+  async function loginGuest(){
+    try{await auth.signInAnonymously();
+    console.log("Log In anonymously!" , auth.currentUser.isAnonymous)
+    }
+    catch(error){
+        console.error("Error logging in as a guest" , error)
+
+    }
+    finally{
+        email.value=""
+        password.value=""
+        router.push('/')
+    }
+
+
   }
-}
   </script>
 
 
