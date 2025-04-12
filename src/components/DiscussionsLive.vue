@@ -1,6 +1,6 @@
 <template>
   <div class="discussions-container">
-  <div class="discussion-creator" v-if="!auth.currentUser.isAnonymous">
+  <div class="discussion-creator" v-if="!auth.currentUser.isAnonymous && (!props.userId || props.userId == auth.currentUser.uid)">
     <div class="user-info">
       <img v-if="userIcon" :src="userIcon" alt="User Icon" class="user-icon" />
     </div>
@@ -21,7 +21,6 @@ import { ref , onMounted, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 import { db, auth } from '@/Firebase/Config';
 import DiscussionCard from '@/components/DiscussionCard.vue';
-import CategoryView from '@/views/CategoryView.vue';
 
 const router = useRouter();
 const discussionContent = ref('');

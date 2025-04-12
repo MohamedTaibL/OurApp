@@ -59,7 +59,7 @@
       <div class="profile-content profile-container profile-posts">
           <!-- Posts Section -->
           <div v-if="activeTab === 'posts'">
-            <DiscussionsLive :userId="userId" /> <!-- Pass the userId prop to DiscussionsLive -->
+            <DiscussionsLive :userId="route.params.id" /> <!-- Pass the userId prop to DiscussionsLive -->
             <!-- Add your posts content here -->
           </div>
 
