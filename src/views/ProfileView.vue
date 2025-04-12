@@ -3,7 +3,7 @@
     <div class="profile-container" v-if="!editProfile">
       <!-- Parameters Icon in the Top-Right -->
       <div class="top-right-settings">
-        <button class="settings-btn" @click="ShowOrHideEdits">
+        <button class="settings-btn" @click="ShowOrHideEdits" v-if = "useRoute().params.id === userId">
           <i class="fas fa-cog"></i> <!-- Font Awesome icon -->
         </button>
       </div>
@@ -48,15 +48,13 @@
       </div>
     </div>
     <!-- Add your edit profile modal here if needed -->
-     <div v-else >
-         <h3>Here we will add the input field for editing the profil</h3>
-         <input type="text" v-model="Name" placeholder="Name" />
-         <input type="text" v-model="username" placeholder="Username" />
+     <div v-if="editProfile" >
+         <h2>Edit Profile</h2>
 
         <button @click="ShowOrHideEdits"> Go back</button>
      </div>
 
-      <div class="profile-content profile-container profile-posts">
+      <div class="profile-content profile-container profile-posts" v-if="!editProfile">
           <!-- Posts Section -->
           <div v-if="activeTab === 'posts'">
             <DiscussionsLive :userId="route.params.id" /> <!-- Pass the userId prop to DiscussionsLive -->
