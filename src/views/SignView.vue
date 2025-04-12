@@ -69,6 +69,8 @@
   const confirmpassword = ref("")
   const date = ref("")
   const gender = ref("male")
+  const imgurl = ref("")
+
 
 
   
@@ -88,6 +90,13 @@
     // Send verification email
     await user.sendEmailVerification();
     alert("A verification email has been sent to your email address. Please verify your email before logging in.");
+    if (gender == "male"){
+        imgurl.value = "https://chaire-ux.hec.ca/wp-content/uploads/2020/05/82e8596b116c3a262653dc9bb3948b2d_managers-supervisors-el-harvey_960-960.jpeg"
+
+    }
+    else{
+        imgurl.value = "https://1cms-img.imgix.net/Momo.jpg?auto=compress"
+    }
 
     // Add the user to the Firestore "users" collection
     await db.collection("users").doc(user.uid).set({
@@ -96,7 +105,7 @@
       birthdate: date.value,
       gender: gender.value,
       email: email.value,
-      verified: false, // Initially set to false until the email is verified
+      imageURL : imgurl.value
     });
     console.log("User added to Firestore successfully");
 
