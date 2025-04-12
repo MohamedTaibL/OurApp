@@ -1,52 +1,44 @@
 <template>
   <div>
-    <h1>Hello</h1>
+    <h1>Hello {{}}</h1>
     <p>Voici les discussions en cours :</p>
-    <button @click="addADoc">Ajouter un document</button>
-    <DiscussionsLive/>
+    <DiscussionsLive />
   </div>
-  <DiscussionsLive/>
 </template>
 
 <script setup>
-/*
-import DiscussionsLive from '@/components/DiscussionsLive.vue'
-import { db , auth } from '@/Firebase/Config'
-import { ref, onMounted } from 'vue'
+import { auth, db } from "@/Firebase/Config";
+import { ref, onMounted } from "vue";
+import DiscussionsLive from "@/components/DiscussionsLive.vue";
 
-// getting the current user
-/*const userName = ref(null)
+const userName = ref("");
+
+// getting the user name from the db using the id (the id of the user is the same as the docRef.id in the db)
+const getUserName = async (id) => {
+  const userDoc = await db.collection("users").doc(id).get();
+  if (userDoc.exists) {
+    return userDoc.data().name;
+  } else {
+    console.log("No such document!");
+    return null;
+  }
+};
 
 onMounted(() => {
-  auth.onAuthStateChanged((user) => {
+  auth.onAuthStateChanged(async (user) => {
     if (user) {
-      userId.value = user.uid
-      userName.value = user.displayName
-      userEmail.value = user.email
-      userPhoto.value = user.photoURL
-      user.value = { id: userId.value, name: userName.value, email: userEmail.value, photo: userPhoto.value }
+      // if the user is a guest we don't want to get his name from the db we just want to display "Guest"
+      if (user.isAnonymous) {
+        userName.value = "Guest";
+      } else {
+        // if the user is not a guest we get his name from the db using his uid
+        console.log("User is signed in: ", user.uid);
+      }
+      // getting the user name from the db using his uid
+      userName.value = await getUserName(user.uid); // getting the user name from the db using his uid
     } else {
-      console.log("No user is signed in")
+      console.log("No user is signed in.");
     }
-  })
-})
-
-async function addADoc() {
-  try{
-    let docRef = await db.collection("Discussions").add({
-      Contenu: "Ceci est un contenu d'exemple",
-      Titre: "Titre d'exemple",
-      editeur: "Utilisateur1",
-      estResponse: false,
-      responses: ["Réponse 1", "Réponse 2"],
-    })
-
-    console.log(`Document id added is : ${docRef.id}`)
-
-  }
-  catch{
-    console.log("There was an error!");
-
-  }
-}*/
+  });
+});
 </script>
