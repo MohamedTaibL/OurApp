@@ -55,16 +55,14 @@ router.beforeEach((to, from, next) => {
   // Protect routes that should only be accessed by authenticated users
   if (to.path !== '/sign' && !user) {
     next('/sign');  // Redirect to sign-in page if not authenticated
-  } else {
-    next();  // Proceed to the requested route
   }
-
   // inCase the user is already logged in and tries to access the sign-in page
-  if (to.path === '/sign' && user) {
+  else if (to.path === '/sign' && user) {
     next('/user');  // Redirect to home page if already authenticated
-  } else {
-    next();  // Proceed to the requested route
   }
+  else {
+    next();  // Proceed to the requested route
+  } 
 
 });
 
