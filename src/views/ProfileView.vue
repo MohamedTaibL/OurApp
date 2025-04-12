@@ -76,8 +76,8 @@
 <script setup>
 import { db, auth } from '@/Firebase/Config';
 import { useRouter } from 'vue-router';
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, ref, watch} from 'vue';
+import { useRoute } from 'vue-router'
 
 const imgpicture = ref('');
 const Name = ref('');
@@ -91,6 +91,8 @@ const editProfile = ref(false); // Controls the visibility of the edit profile m
 const user = auth.currentUser;
 const userId = user.uid;
 
+
+const loadData = (userId) =>{
 db.collection('users')
   .doc(userId)
   .get()
@@ -110,8 +112,9 @@ db.collection('users')
   .catch((error) => {
     console.log('Error getting document:', error);
   });
-
+}
 const router = useRouter();
+const route = useRoute();
 
 const disconnect = () => {
   auth.signOut()
@@ -128,12 +131,28 @@ function ShowOrHideEdits() {
   editProfile.value = !editProfile.value;
 }
 
+watch(
+  () => route.params.id,
+  (newId) => {
+    if (newId) {
+      loadData(newId);
+    } else {
+      router.replace({ name: 'user', params: { id: auth.currentUser.uid } });
+    }
+  },
+  { immediate: true } // Also trigger on initial mount
+);
+
+
+
 onMounted(() => {
   if (!useRoute().params.id) {
     router.replace({ name: 'user', params: { id: auth.currentUser.uid } });
   }
 
-  editProfile.value = false; // Initialize editProfile to false on mount    
+  editProfile.value = false; // Initialize editProfile to false on mount
+  
+  loadData(route.params.id || auth.currentUser.uid); // Load data for the user profile
 });
 
 
