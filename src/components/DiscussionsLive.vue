@@ -17,15 +17,24 @@
 </template>
 
 <script setup>
-import { ref , onMounted, onUpdated } from 'vue';
+import { ref , onMounted, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 import { db, auth } from '@/Firebase/Config';
 import DiscussionCard from '@/components/DiscussionCard.vue';
+import CategoryView from '@/views/CategoryView.vue';
 
 const router = useRouter();
 const discussionContent = ref('');
 const discussions = ref([]);
 const userIcon = ref('https://cdn-icons-png.flaticon.com/512/149/149071.png');
+
+const props = defineProps({
+  userId: {
+    type: String,
+    required: false,
+  },
+  // to be later added
+});
 
 // Fetch user data
 auth.onAuthStateChanged(async (user) => {
@@ -40,7 +49,15 @@ auth.onAuthStateChanged(async (user) => {
 const fetchDiscussions = async () => {
   const discussionsRef = db.collection('discussions').orderBy('date', 'desc');
   const snapshot = await discussionsRef.get();
-  discussions.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // give it both the id and the data
+  // in case the userId is passed we want to filter the discussions by the userId
+  if (props.userId) {
+    discussions.value = snapshot.docs
+      .map((doc) => ({ id: doc.id, ...doc.data() }))
+      .filter((discussion) => discussion.userId === props.userId);
+  } else {
+    discussions.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // give it both the id and the data
+  }
+  // to add the rest of the filtering later
 };
 
 onMounted(() => {
@@ -65,8 +82,7 @@ onMounted(() => {
   background: rgba(242, 239, 231, 0.69); /* Matches the SignView background */
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 800px;
+  width: 800px;
   margin: 2rem auto;
   font-family: 'Poppins', sans-serif;
 }
