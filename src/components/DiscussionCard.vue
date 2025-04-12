@@ -1,8 +1,8 @@
 <template>
   <div class="card-container">
     <!-- Card Header with User Information -->
-    <div class="card-header" @click.stop="goToUser">
-      <div class="user-icon">
+    <div class="card-header" >
+      <div class="user-icon" @click.stop="goToUser">
         <img :src="userIcon" alt="User Icon" />
         <p>{{ userName }}</p>
       </div>
