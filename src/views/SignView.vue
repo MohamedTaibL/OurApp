@@ -74,39 +74,61 @@
   
   
   async function createUser() {
-    const isValid = await verify()
-    if (!isValid) {
-        console.log("Validation failed")
-      return
-    }
-    try {
-      await auth.createUserWithEmailAndPassword(email.value, password.value)
-      await db.collection("users").add({
-        UID: auth.currentUser.uid,
-        username : username.value,
-        name : Name.value,
-        birthdate: date.value,
-        gender : gender.value
-      }).then((docRef) => {
-        console.log("User document created with ID: ", docRef.id)
-      }).catch((error) => {
-        console.error("Error adding user document: ", error)
-      })
-      
-    } catch (error) {
-      console.error("Error creating user:", error)
-    } finally {
-      email.value = ''
-      password.value = ''
-    }
-
-    auth.signOut()
-    console.log("User signed out")
-    login.value = true
-
-    
-
+  const isValid = await verify();
+  if (!isValid) {
+    console.log("Validation failed");
+    return;
   }
+
+  try {
+    // Create the user
+    const userCredential = await auth.createUserWithEmailAndPassword(email.value, password.value);
+    const user = userCredential.user;
+
+    // Send verification email
+    await user.sendEmailVerification();
+    alert("A verification email has been sent to your email address. Please verify your email before logging in.");
+
+    // Add the user to the Firestore "users" collection
+    await db.collection("users").doc(user.uid).set({
+      UID: user.uid,
+      username: username.value,
+      name: Name.value,
+      birthdate: date.value,
+      gender: gender.value,
+      email: email.value,
+      verified: false, // Initially set to false until the email is verified
+    });
+    console.log("User added to Firestore successfully");
+
+    // Sign out the user after sending the verification email
+    await auth.signOut();
+    console.log("User signed out after sending verification email");
+
+    // Reset the form and redirect to login
+    email.value = '';
+    password.value = '';
+    confirmpassword.value = '';
+    username.value = '';
+    Name.value = '';
+    date.value = '';
+    gender.value = 'male';
+
+    printLogin(); // Switch to the login view
+  } catch (error) {
+    console.error("Error creating user:", error);
+
+    // Handle specific Firebase errors
+    if (error.code === "auth/email-already-in-use") {
+      alert("This email is already in use. Please use a different email.");
+    } else if (error.code === "auth/invalid-email") {
+      alert("Invalid email address. Please enter a valid email.");
+    } else {
+      alert("An error occurred during sign-up. Please try again.");
+    }
+  }
+}
+
 
   async function verify() {
   if (password.value !== confirmpassword.value) {
@@ -140,17 +162,30 @@
   
 
 
-  async function logUser(){
-    try {
-        await auth.signInWithEmailAndPassword(email.value, password.value)
-        console.log("User logged in successfully")
-        router.push('/')
-    } catch (error) {
-        console.error("Error logging in:", error)
-    } finally {
-        password.value = ''
+async function logUser() {
+  try {
+    // Sign in the user
+    const userCredential = await auth.signInWithEmailAndPassword(email.value, password.value);
+    const user = userCredential.user;
+
+    // Check if the email is verified
+    if (!user.emailVerified) {
+      alert("A verification email has been sent to your email address. Please check your inbox.");
+      await user.sendEmailVerification();
+      await auth.signOut(); // Sign out the user if email is not verified
+      return;
     }
+
+    console.log("User logged in successfully");
+    router.push('/'); // Redirect to the home page
+  } catch (error) {
+    console.error("Error logging in:", error);
+
+  } finally {
+    email.value = '';
+    password.value = '';
   }
+}
   onMounted(() => {
     login.value = true
   })
