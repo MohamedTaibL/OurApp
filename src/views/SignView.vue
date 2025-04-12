@@ -81,14 +81,13 @@
     }
     try {
       await auth.createUserWithEmailAndPassword(email.value, password.value)
-      await db.collection("users").add({
-        UID: auth.currentUser.uid,
+      await db.collection("users").doc(auth.currentUser.uid).set({
         username : username.value,
         name : Name.value,
         birthdate: date.value,
         gender : gender.value
       }).then((docRef) => {
-        console.log("User document created with ID: ", docRef.id)
+        console.log("User document created with ID: ", docRef.id) // the same as the user's
       }).catch((error) => {
         console.error("Error adding user document: ", error)
       })
