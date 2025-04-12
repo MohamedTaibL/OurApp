@@ -1,10 +1,20 @@
 <template>
-  <NavBar/>
-  <router-view/>
+  <NavBar class="NavBar"/>
+  <router-view :class="routerViewClass"/>
 </template>
 
 <script setup>
 import NavBar from './components/NavBar.vue';
+import { useRoute } from 'vue-router';
+import { computed } from 'vue';
+// if the current route is "/sign" take of the margin-top of the router-view
+
+const route = useRoute();
+
+const routerViewClass = computed(() => {
+  return route.path === '/sign' ? 'router-view no-padding' : 'router-view';
+});
+
 </script>
 
 <style>
@@ -16,16 +26,20 @@ import NavBar from './components/NavBar.vue';
   color: #2c3e50;
 }
 
-nav {
-  padding: 30px;
+.NavBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Ensure the navbar is above other content */
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.router-view {
+  padding-top: 100px; /* Adjust this value based on your navbar height */
+  height: 100%;
 }
 
-nav a.router-link-exact-active {
-  color: #42b983;
+.no-padding {
+  padding-top: 0; /* No margin for the sign-in page */
 }
 </style>

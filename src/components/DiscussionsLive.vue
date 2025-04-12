@@ -1,72 +1,103 @@
 <template>
-  <div class="discussion-maker">
-    <router-link :to="{ name: 'create' }">
-      <button class="btn btn-primary">Create Discussion</button>
-    </router-link>
-    <div class="user-icon">
-      <img :src="icon.value" alt="User Icon" v-if="icon"/>
-      <p>@{{ userName.value }}</p>
-    </div>
-  </div>
   <div class="discussions-container">
-    <div class="discussions-list">
-      <DiscussionCard
-        v-for="discussion in discussions"
-        :key="discussion.id"
-        :discussion="discussion"
-      />
+  <div class="discussion-creator" v-if="!auth.currentUser.isAnonymous">
+    <div class="user-info">
+      <img v-if="userIcon" :src="userIcon" alt="User Icon" class="user-icon" />
     </div>
+    <input v-model="discussionContent" placeholder="What's on your mind?" class="discussion-input" @click="router.push('/create')" />
+  </div>
+  <div class="discussions-list">
+    <DiscussionCard
+      v-for="discussion in discussions"
+      :key="discussion.id"
+      :discussion="discussion"
+    />
+  </div>
   </div>
 </template>
+
 <script setup>
-import { db, auth } from "@/Firebase/Config";
-import { ref, onMounted } from "vue";
-import DiscussionCard from "@/components/DiscussionCard.vue";
+import { ref , onMounted, onUpdated } from 'vue';
+import { useRouter } from 'vue-router';
+import { db, auth } from '@/Firebase/Config';
+import DiscussionCard from '@/components/DiscussionCard.vue';
 
-// getting the discussions from the db
+const router = useRouter();
+const discussionContent = ref('');
 const discussions = ref([]);
-const icon = ref("https://cdn-icons-png.flaticon.com/512/149/149071.png");
-const userName = ref("-Guest-"); // default value for the user name
-const userData = ref(null); // default value for the user data
+const userIcon = ref('https://cdn-icons-png.flaticon.com/512/149/149071.png');
 
-const getDiscussions = async () => {
-  const querySnapshot = await db.collection("discussions").get();
-  discussions.value = querySnapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
-};
-
-// get the user icon and name from the db using his uid
-const getUserData = async (uid) => {
-  const userDoc = await db.collection("users").doc(uid).get();
-  if (userDoc.exists) {
-    return userDoc.data();
-  } else {
-    console.log("No such document!");
-    return null;
+// Fetch user data
+auth.onAuthStateChanged(async (user) => {
+  if (user && !user.isAnonymous) {
+    const userDoc = await db.collection('users').doc(user.uid).get();
+    if (userDoc.exists) {
+      userIcon.value = userDoc.data().imageURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+    }
   }
+});
+
+const fetchDiscussions = async () => {
+  const discussionsRef = db.collection('discussions').orderBy('date', 'desc');
+  const snapshot = await discussionsRef.get();
+  discussions.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // give it both the id and the data
 };
 
 onMounted(() => {
-  getDiscussions()
-    .then(() => {
-      console.log(discussions.value); // getting the discussions from the db
-    })
-    .catch((error) => {
-      console.error("Error getting discussions: ", error);
-    });
-
-  auth.onAuthStateChanged(async (user) => {
-    if (user && !user.isAnonymous) {
-      userData.value = await getUserData(user.uid); // getting the user icon from the db using his uid
-      icon.value = userData.value?.icon || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-      userName.value = userData.value?.name || "-Guest-";
-    } else {
-      console.log("No user is signed in.");
-    }
-  });
-
-  console.log("user icon link -------> ", icon.value); // getting the user icon from the db
+  fetchDiscussions();
 });
+
 </script>
+
+<style scoped>
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+.discussion-container{
+  height: 100%;
+}
+/* General container styling */
+.discussion-creator {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(242, 239, 231, 0.69); /* Matches the SignView background */
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto;
+  font-family: 'Poppins', sans-serif;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.discussion-input {
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  resize: none;
+  transition: background 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.discussions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+</style>
