@@ -1,6 +1,6 @@
 <template>
     <div class="sign-container">
-      <div class="sign-view" v-if="!login">
+      <div class="sign-view" v-if="signup">
         <h1>Sign Up</h1>
         <form @submit.prevent="createUser" class="form">
           <input type="email" placeholder="Email" v-model="email" required />
@@ -26,17 +26,28 @@
         </form>
         <button @click="printLogin" class="switch-btn">Already have an account? Login!</button>
       </div>
-      <div class="login-view" v-else>
+      <div class="login-view" v-if="login">
         <h1>Login</h1>
         <form @submit.prevent="logUser" class="form">
           <input type="email" placeholder="Email" v-model="email" required />
           <input type="password" placeholder="Password" v-model="password" required />
           <button type="submit" class="btn">Login</button>
         </form>
-        <button class="switch-btn">Forgot Password?</button>
+        <button @click="printResetPass"class="switch-btn">Forgot Password?</button>
         <div id = "Create" >
-            <button @click="printLogin" class="btn">Log in as <br> A Guest</button>    
-            <button @click="printLogin" class="btn">Create A New Account</button>
+            <button class="btn">Log in as <br> A Guest</button>    
+            <button @click="printSignUp" class="btn">Create A New Account</button>
+        </div>
+      </div>
+
+      <div>
+        <div v-if="resetpass" class="sign-view">
+          <h1>Reset Password</h1>
+          <form @submit.prevent="resetPassword" class="form">
+            <input type="email" placeholder="Email" v-model="email" required />
+            <button type="submit" class="btn">Send Reset Link</button>
+          </form>
+          <button @click="printLogin" class="switch-btn">Back to Login</button>
         </div>
       </div>
     </div>
@@ -48,7 +59,9 @@
   import { useRouter } from 'vue-router'
   
   const router = useRouter()
-  const login = ref(false)
+  const login = ref(true)
+  const signup = ref(false)
+  const resetpass = ref(false)
   const email = ref("")
   const password = ref("")
   const username = ref("")
@@ -56,6 +69,7 @@
   const confirmpassword = ref("")
   const date = ref("")
   const gender = ref("male")
+
 
   
   
@@ -134,18 +148,53 @@
     } catch (error) {
         console.error("Error logging in:", error)
     } finally {
-        email.value = ''
         password.value = ''
     }
   }
   onMounted(() => {
-    login.value = false
+    login.value = true
   })
   
   function printLogin() {
-    login.value = !login.value
+    login.value = true
+    signup.value = false
+    resetpass.value = false
   }
+
+
+  function printSignUp() {
+    login.value = false
+    signup.value = true
+    resetpass.value = false
+  }
+  function printResetPass() {
+    login.value = false
+    signup.value = false
+    resetpass.value = true
+  }
+
+
+  async function resetPassword() {
+  if (!email.value) {
+    alert("Please enter your email address.");
+    return;
+  }
+
+  try {
+    await auth.sendPasswordResetEmail(email.value);
+    alert("Password reset email sent. Please check your inbox.");
+  } catch (error) {
+    console.error("Error sending password reset email:", error);
+  } finally {
+    email.value = ""
+    router.push('/sign')
+    printLogin()
+  }
+}
   </script>
+
+
+
   
 <style scoped>
 
