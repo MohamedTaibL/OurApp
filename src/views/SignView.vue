@@ -91,7 +91,6 @@
 
     // Add the user to the Firestore "users" collection
     await db.collection("users").doc(user.uid).set({
-      UID: user.uid,
       username: username.value,
       name: Name.value,
       birthdate: date.value,
