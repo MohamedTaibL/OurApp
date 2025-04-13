@@ -54,33 +54,79 @@
   <button class="edit-profile-button" type="button" @click="editsection = 1">Change Password</button>
   <div class="edit-profile-section" :class="{ active: editsection === 1 }">
     <h3>Change Password</h3>
-    <input type="password" placeholder="Current Password" v-model="currentPassword" />
+    <input type="password" placeholder="Enter Your Current Password" v-model="currentPassword" />
     <input type="password" placeholder="New Password" v-model="newPassword" />
-    <button type="button" @click="changePassword">Submit</button>
+    <button type="button" @click="changePassword" style="background-color: #9ACBD0;">Submit</button>
   </div>
 
   <!-- Change Email Section -->
   <button class="edit-profile-button" type="button" @click="editsection = 2">Change Email</button>
   <div class="edit-profile-section" :class="{ active: editsection === 2 }">
     <h3>Change Email</h3>
-    <input type="email" placeholder="New Email" />
-    <button type="button">Submit</button>
+    <input type="password" placeholder="Enter Your Current Password" v-model="currentPasswordEmail" />
+
+    <input type="email" placeholder="New Email" v-model="newEmail" />
+    <button type="button" @click="changeEmail" style="background-color:#9ACBD0">Submit</button>
   </div>
 
   <!-- Change General Information Section -->
-  <button class="edit-profile-button" type="button" @click="editsection = 3">Change General Information</button>
+<div class="edit-profile-item">
+    <button class="edit-profile-button" @click="editsection = 3">Change General Information</button>
   <div class="edit-profile-section" :class="{ active: editsection === 3 }">
     <h3>Change General Information</h3>
-    <input type="text" placeholder="New Name" />
-    <input type="text" placeholder="New Username" />
-    <input type="date" placeholder="New Date of Birth" />
-    <button type="button">Submit</button>
+
+    <!-- Current Password Input for Reauthentication -->
+    <div class="input-container">
+      <input
+        type="password"
+        placeholder="Enter Your Current Password"
+        v-model="currentPasswordGenInfo"
+      />
+    </div>
+
+    <!-- Separator -->
+    <hr />
+
+    <!-- Toggle Name Input -->
+    <div class="toggle-input">
+      <button class="toggle-button" @click="toggleName" style="background-color:#9ACBD0">Edit Name</button>
+      <div v-if="changeName" class="input-container">
+        <input type="text" placeholder="New Name" v-model="editName" />
+      </div>
+    </div>
+
+    <!-- Toggle Username Input -->
+    <div class="toggle-input">
+      <button class="toggle-button" @click="toggleUsername" style="background-color: #9ACBD0;">Edit Username</button>
+      <div v-if="changeUsername" class="input-container">
+        <input type="text" placeholder="New Username" v-model="editUsername" />
+      </div>
+    </div>
+
+    <!-- Toggle Date of Birth Input -->
+    <div class="toggle-input">
+      <button class="toggle-button" @click="toggleDateOfBirth" style="background-color: #9ACBD0;">Edit Date of Birth</button>
+      <div v-if="changeDateOfBirth" class="input-container">
+        <input type="date" v-model="editDate"/>
+      </div>
+    </div>
+
+    <button type="button" style="background-color:#9ACBD0" v-if="changeName || changeUsername || changeDateOfBirth" @click="changeGenInfo">Submit</button>
   </div>
+</div>
 
   <!-- Go Back Button -->
   <button class="edit-profile-button" type="button" @click="ShowOrHideEdits">Go Back</button>
 </div>
-  </div>
+</div>
+
+<div class="profile-content profile-container profile-posts">
+          <!-- Posts Section -->
+          <div v-if="activeTab === 'posts'">
+            <DiscussionsLive :userId="route.params.id" /> <!-- Pass the userId prop to DiscussionsLive -->
+            <!-- Add your posts content here -->
+          </div>
+</div>
 
   </template>
 
@@ -106,6 +152,18 @@ const editProfile = ref(false); // Controls the visibility of the edit profile m
 const editsection =ref(0)
 const currentPassword = ref('');
 const newPassword = ref('');
+const newEmail = ref('');
+const currentPasswordEmail = ref('');
+const currentPasswordGenInfo = ref('');
+const changeName = ref(false);
+const changeUsername = ref(false);
+const changeDateOfBirth = ref(false);
+const editName = ref("");
+const editUsername = ref("");
+const editDate = ref("");
+
+
+
 
 const user = auth.currentUser;
 const userId = user.uid;
@@ -148,50 +206,142 @@ const disconnect = () => {
 
 function ShowOrHideEdits() {
   editProfile.value = !editProfile.value;
+  loadData(userId);
+  // we need to refresh the attributes
+
 }
 
-watch(
-  () => route.params.id,
-  (newId) => {
-    if (newId) {
-      loadData(newId);
-    } else {
-      router.replace({ name: 'user', params: { id: auth.currentUser.uid } });
-    }
-  },
-  { immediate: true } // Also trigger on initial mount
-);
+
+
+
 
 //We first need to check if the current password is correct, and then we can change the password using the updatePassword method from firebase auth.
 // We will also need to reauthenticate the user before changing the password, using the reauthenticateWithCredential method from firebase auth.
-const changePassword = async () =>{
-    if (newPassword.value.length < 6) {
-        alert('New password should be at least 6 characters long.');
-        newPassword.value = ''; // Clear the new password field 
-        return;
-    }
-    const user = auth.currentUser;
-    const credentials = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword.value);
+const changePassword = async () => {
+  if (newPassword.value.length < 6) {
+    alert('New password should be at least 6 characters long.');
+    newPassword.value = ''; // Clear the new password field
+    return;
+  }
 
+  const credentials = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword.value);
+
+  // First Try Block: Reauthenticate the User
+  try {
+    await user.reauthenticateWithCredential(credentials);
+  } catch (error) {
+    console.error('Error reauthenticating user:', error);
+    alert('Verify your password or connection.');
+    return; // Exit the function if reauthentication fails
+  }
+
+  // Second Try Block: Update the Password
+  try {
+    await user.updatePassword(newPassword.value);
+    console.log('Password updated successfully!');
+    alert('Password updated successfully!');
+  } catch (error) {
+    console.error('Error updating password:', error);
+    alert('Problem with connection. Please try again.');
+  } finally {
+    // Clear the input fields
+    currentPassword.value = '';
+    newPassword.value = '';
+  }
+};
+
+
+const changeEmail = async () => {
+  const credentials = firebase.auth.EmailAuthProvider.credential(user.email, currentPasswordEmail.value);
+
+  // First Try Block: Reauthenticate the User
+  try {
+    await user.reauthenticateWithCredential(credentials);
+    console.log('Reauthentication successful.');
+  } catch (error) {
+    console.error('Error reauthenticating user:', error);
+    alert('Verify your password or connection.');
+    return; // Exit the function if reauthentication fails
+  }
+
+  // Second Try Block: Send Verification Email for New Email Address
+  try {
+    await user.verifyBeforeUpdateEmail(newEmail.value);
+    alert('A verification email has been sent to your new email address. Please verify it to complete the update.');
+  } catch (error) {
+    console.error('Error sending verification email:', error);
+    alert('Problem with connection. Please try again.');
+  } finally {
+    // Clear the input fields
+    currentPasswordEmail.value = '';
+    newEmail.value = '';
+  }
+};
+
+
+
+const changeGenInfo = async () =>{
+    const credentials = firebase.auth.EmailAuthProvider.credential(user.email, currentPasswordGenInfo.value);
+    
+    // First Try Block: Reauthenticate the User
     try {
         await user.reauthenticateWithCredential(credentials);
-        await user.updatePassword(newPassword.value);
-        console.log('Password updated successfully!');
-        // Optionally, you can show a success message to the user
     } catch (error) {
-        console.error('Error updating password: ', error);
-        // Optionally, you can show an error message to the user
+        alert('Verify your password or connection.');
+        return; // Exit the function if reauthentication fails
     }
-    finally{
-        currentPassword.value = ''; // Clear the current password field
-        newPassword.value = ''; // Clear the new password field
+    
+    // Second Try Block: Update General Information
+    try{
+        //We also need to ensure that the username is unique
+        const usernameQuery = await db.collection('users').where('username', '==', editUsername.value).get();
+        if (!usernameQuery.empty) {
+            alert('Username already exists. Please choose a different one.');
+            return;
+        }
+        if (editName.value !== "") {
+            await db.collection('users').doc(userId).update({ name: editName.value });
+        }
+        if (editUsername.value !== "") {
+            await db.collection('users').doc(userId).update({ username: editUsername.value });
+        }
+        if (editDate.value !== "") {
+            await db.collection('users').doc(userId).update({ birthdate: editDate.value });
+        }
+        alert("Updated successfully!");
+
     }
+    catch(error){
+        console.error('Error updating general information:', error);
+        alert('Problem with connection. Please try again.');
+    }
+    finally {
+        // Clear the input fields
+        currentPasswordGenInfo.value = '';
+        editName.value = '';
+        editUsername.value = '';
+        editDate.value = '';
+        changeName.value = false;
+        changeUsername.value = false;
+        changeDateOfBirth.value = false;
 
-
-
-
+    }
+    
 }
 
+
+
+const toggleName = () => {
+  changeName.value = !changeName.value;
+};
+
+const toggleUsername = () => {
+  changeUsername.value = !changeUsername.value;
+};
+
+const toggleDateOfBirth = () => {
+  changeDateOfBirth.value = !changeDateOfBirth.value;
+};
 
 
 onMounted(() => {
@@ -205,6 +355,17 @@ onMounted(() => {
 });
 
 
+watch(
+  () => route.params.id,
+  (newId) => {
+    if (newId) {
+      loadData(newId);
+    } else {
+      router.replace({ name: 'user', params: { id: auth.currentUser.uid } });
+    }
+  },
+  { immediate: true } // Also trigger on initial mount
+);
 
 </script>
 
@@ -370,7 +531,7 @@ onMounted(() => {
 /* Buttons Styled Like a Navbar */
 .edit-profile-button {
   width: 100%;
-  background-color: #006a71;
+  background-color: #48A6A7;
   color: #ffffff;
   font-size: 1.2rem;
   font-weight: bold;
@@ -449,5 +610,45 @@ onMounted(() => {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Toggle Input Container */
+.toggle-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Space between button and input */
+  margin-bottom: 15px; /* Space between rows */
+}
+
+/* Toggle Button */
+.toggle-button {
+  background-color: #006a71;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.toggle-button:hover {
+  background-color: #42b983;
+  transform: scale(1.02);
+}
+
+/* Input Container */
+.input-container {
+  margin-top: 10px; /* Space between button and input */
+}
+
+.input-container input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
 }
 </style>
