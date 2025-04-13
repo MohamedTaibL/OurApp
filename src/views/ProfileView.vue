@@ -3,7 +3,7 @@
     <div class="profile-container" v-if="!editProfile">
       <!-- Parameters Icon in the Top-Right -->
       <div class="top-right-settings">
-        <button class="settings-btn" @click="ShowOrHideEdits" v-if = "useRoute().params.id === userId">
+        <button class="settings-btn" @click="ShowOrHideEdits" v-if = "(!user.isAnonymous)&&(useRoute().params.id === userId)">
           <i class="fas fa-cog"></i> <!-- Font Awesome icon -->
         </button>
       </div>
@@ -40,7 +40,7 @@
           class="navbar-item"
           :class="{ active: activeTab === 'saves' }"
           @click="activeTab = 'saves'"
-          v-if ="userId === useRoute().params.id"
+          v-if ="(!user.isAnonymous)&&(userId === useRoute().params.id)"
         >
             <!-- Only show Saves tab if the user is the profile owner -->
           Saves
