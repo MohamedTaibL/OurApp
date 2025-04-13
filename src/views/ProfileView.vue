@@ -49,7 +49,38 @@
     </div>
     <!-- Add your edit profile modal here if needed -->
      <div v-if="editProfile" >
-         <h2>Edit Profile</h2>
+         <!-- We will have 3 seperate possibilities, u can only select one each, change password, change email, and change general information( name, username, date of birth, possibily gender as well) , and to display each one at a time, we will use a variable that takes values 1 , 2 and 3 to display each one uniquely -->
+            <div>
+                <button @click="editsection = 1">Change Password</button>
+                <div v-if="editsection === 1">
+                    <h3>Change Password</h3>
+                    <input type="password" placeholder="Current Password" v-model="currentPassword" />
+                    <input type="password" placeholder="New Password" v-model="newPassword" />
+                    <button @click="changePassword">Submit</button>
+                </div>
+
+            </div>
+            <div>
+                <button @click="editsection = 2">Change Email</button>
+                <div v-if="editsection === 2">
+                    <h3>Change Email</h3>
+                    <input type="email" placeholder="New Email" />
+                    <button>Submit</button>
+                </div>
+            </div>
+            <div>
+                <button @click="editsection = 3">Change General Information</button>
+                <div v-if="editsection === 3">
+                    <h3>Change General Information</h3>
+                    <input type="text" placeholder="New Name" />
+                    <input type="text" placeholder="New Username" />
+                    <input type="date" placeholder="New Date of Birth" />
+                    <button>Submit</button>
+                </div>
+            </div>
+            
+
+
 
         <button @click="ShowOrHideEdits"> Go back</button>
      </div>
@@ -77,6 +108,8 @@ import { useRouter } from 'vue-router';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import DiscussionsLive from '@/components/DiscussionsLive.vue'; // Import the DiscussionsLive component
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 
 const imgpicture = ref('');
@@ -87,6 +120,9 @@ const birthday = ref('');
 const gender = ref('');
 const activeTab = ref('posts'); // Tracks the active tab (Posts or Saves)
 const editProfile = ref(false); // Controls the visibility of the edit profile modal
+const editsection =ref(0)
+const currentPassword = ref('');
+const newPassword = ref('');
 
 const user = auth.currentUser;
 const userId = user.uid;
@@ -142,6 +178,36 @@ watch(
   },
   { immediate: true } // Also trigger on initial mount
 );
+
+//We first need to check if the current password is correct, and then we can change the password using the updatePassword method from firebase auth.
+// We will also need to reauthenticate the user before changing the password, using the reauthenticateWithCredential method from firebase auth.
+const changePassword = async () =>{
+    if (newPassword.value.length < 6) {
+        alert('New password should be at least 6 characters long.');
+        newPassword.value = ''; // Clear the new password field 
+        return;
+    }
+    const user = auth.currentUser;
+    const credentials = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword.value);
+
+    try {
+        await user.reauthenticateWithCredential(credentials);
+        await user.updatePassword(newPassword.value);
+        console.log('Password updated successfully!');
+        // Optionally, you can show a success message to the user
+    } catch (error) {
+        console.error('Error updating password: ', error);
+        // Optionally, you can show an error message to the user
+    }
+    finally{
+        currentPassword.value = ''; // Clear the current password field
+        newPassword.value = ''; // Clear the new password field
+    }
+
+
+
+
+}
 
 
 
