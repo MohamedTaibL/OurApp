@@ -47,58 +47,41 @@
         </button>
       </div>
     </div>
-    <!-- Add your edit profile modal here if needed -->
-     <div v-if="editProfile" >
-         <!-- We will have 3 seperate possibilities, u can only select one each, change password, change email, and change general information( name, username, date of birth, possibily gender as well) , and to display each one at a time, we will use a variable that takes values 1 , 2 and 3 to display each one uniquely -->
-            <div>
-                <button @click="editsection = 1">Change Password</button>
-                <div v-if="editsection === 1">
-                    <h3>Change Password</h3>
-                    <input type="password" placeholder="Current Password" v-model="currentPassword" />
-                    <input type="password" placeholder="New Password" v-model="newPassword" />
-                    <button @click="changePassword">Submit</button>
-                </div>
+   
 
-            </div>
-            <div>
-                <button @click="editsection = 2">Change Email</button>
-                <div v-if="editsection === 2">
-                    <h3>Change Email</h3>
-                    <input type="email" placeholder="New Email" />
-                    <button>Submit</button>
-                </div>
-            </div>
-            <div>
-                <button @click="editsection = 3">Change General Information</button>
-                <div v-if="editsection === 3">
-                    <h3>Change General Information</h3>
-                    <input type="text" placeholder="New Name" />
-                    <input type="text" placeholder="New Username" />
-                    <input type="date" placeholder="New Date of Birth" />
-                    <button>Submit</button>
-                </div>
-            </div>
-            
+    <div class="edit-profile-container" v-if="editProfile">
+  <!-- Change Password Section -->
+  <button class="edit-profile-button" type="button" @click="editsection = 1">Change Password</button>
+  <div class="edit-profile-section" :class="{ active: editsection === 1 }">
+    <h3>Change Password</h3>
+    <input type="password" placeholder="Current Password" v-model="currentPassword" />
+    <input type="password" placeholder="New Password" v-model="newPassword" />
+    <button type="button" @click="changePassword">Submit</button>
+  </div>
 
+  <!-- Change Email Section -->
+  <button class="edit-profile-button" type="button" @click="editsection = 2">Change Email</button>
+  <div class="edit-profile-section" :class="{ active: editsection === 2 }">
+    <h3>Change Email</h3>
+    <input type="email" placeholder="New Email" />
+    <button type="button">Submit</button>
+  </div>
 
+  <!-- Change General Information Section -->
+  <button class="edit-profile-button" type="button" @click="editsection = 3">Change General Information</button>
+  <div class="edit-profile-section" :class="{ active: editsection === 3 }">
+    <h3>Change General Information</h3>
+    <input type="text" placeholder="New Name" />
+    <input type="text" placeholder="New Username" />
+    <input type="date" placeholder="New Date of Birth" />
+    <button type="button">Submit</button>
+  </div>
 
-        <button @click="ShowOrHideEdits"> Go back</button>
-     </div>
+  <!-- Go Back Button -->
+  <button class="edit-profile-button" type="button" @click="ShowOrHideEdits">Go Back</button>
+</div>
+  </div>
 
-      <div class="profile-content profile-container profile-posts" v-if="!editProfile">
-          <!-- Posts Section -->
-          <div v-if="activeTab === 'posts'">
-            <DiscussionsLive :userId="route.params.id" /> <!-- Pass the userId prop to DiscussionsLive -->
-            <!-- Add your posts content here -->
-          </div>
-
-          <!-- Saves Section -->
-          <div v-else-if="activeTab === 'saves'">
-            <h3>We will show saved posts for the if the profile Owner id matches the authentication current user id, allowing the user to also delete the saved posts if they wish </h3>
-            <!-- Add your saves content here -->
-          </div>
-      </div>
-    </div>
   </template>
 
 
@@ -361,5 +344,110 @@ onMounted(() => {
   color: #ffffff;
   background-color: #006a71;
   border-radius: 5px;
+}
+/* Edit Profile Container */
+.edit-profile-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Add spacing between items */
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Poppins', sans-serif;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Each Item (Button + Dropdown) */
+.edit-profile-item {
+  width: 100%;
+  position: relative; /* Ensure dropdown aligns with the button */
+}
+
+/* Buttons Styled Like a Navbar */
+.edit-profile-button {
+  width: 100%;
+  background-color: #006a71;
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+.edit-profile-button:hover {
+  background-color: #42b983;
+  transform: scale(1.02);
+}
+
+/* Dropdown Section */
+.edit-profile-section {
+  display: none;
+  width: 100%; /* Match the width of the button */
+  padding: 15px;
+  margin-top: 5px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  animation: dropdown 0.3s ease;
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+.edit-profile-section.active {
+  display: block; /* Show the dropdown when active */
+}
+
+/* Form Elements */
+.edit-profile-section h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.edit-profile-section input {
+  width: 100%; /* Match the width of the dropdown */
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+.edit-profile-section button {
+  background-color: #006a71;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.edit-profile-section button:hover {
+  background-color: #42b983;
+  transform: scale(1.05);
+}
+
+/* Dropdown Animation */
+@keyframes dropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
