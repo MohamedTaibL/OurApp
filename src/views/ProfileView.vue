@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="profile-view">
     <div class="profile-container" v-if="!editProfile">
       <!-- Parameters Icon in the Top-Right -->
@@ -120,13 +121,23 @@
 </div>
 </div>
 
-<div class="profile-content profile-container profile-posts">
+<div class="profile-content profile-container profile-posts" v-if="(activeTab === 'posts') && (!editProfile)">
           <!-- Posts Section -->
-          <div v-if="activeTab === 'posts'">
+          <div>
             <DiscussionsLive :userId="route.params.id" /> <!-- Pass the userId prop to DiscussionsLive -->
             <!-- Add your posts content here -->
           </div>
 </div>
+<div class="profile-content profile-container profile-posts" v-if="(activeTab === 'saves') && (!editProfile)">
+          <!-- Posts Section -->
+          <div>
+            <DiscussionsLive :userId="route.params.id" :onlySaved="true" /> <!-- Pass the userId prop to DiscussionsLive -->
+            <!-- Add your posts content here -->
+          </div>
+</div>
+</div>
+
+
 
   </template>
 
@@ -167,6 +178,7 @@ const editDate = ref("");
 
 const user = auth.currentUser;
 const userId = user.uid;
+
 
 
 const loadData = (userId) =>{

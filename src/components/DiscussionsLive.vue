@@ -32,6 +32,11 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  onlySaved: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
   // to be later added
 });
 
@@ -46,17 +51,37 @@ auth.onAuthStateChanged(async (user) => {
 });
 
 const fetchDiscussions = async () => {
-  const discussionsRef = db.collection('discussions').orderBy('date', 'desc');
-  const snapshot = await discussionsRef.get();
-  // in case the userId is passed we want to filter the discussions by the userId
-  if (props.userId) {
-    discussions.value = snapshot.docs
-      .map((doc) => ({ id: doc.id, ...doc.data() }))
-      .filter((discussion) => discussion.userId === props.userId);
+  if (!props.onlySaved) {
+    // Fetch discussions from Firestore in descending order of the date
+    const discussionsRef = db.collection('discussions').orderBy('date', 'desc');
+    const snapshot = await discussionsRef.get();
+
+    // Filter discussions by userId if provided
+    if (props.userId) {
+      discussions.value = snapshot.docs
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .filter((discussion) => discussion.userId === props.userId);
+    } else {
+      discussions.value = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })); // Include both id and data
+    }
   } else {
-    discussions.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // give it both the id and the data
+    // Fetch saved discussions for the current user
+    const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
+    if (userDoc.exists) {
+      const savedDiscussions = userDoc.data().savedPosts || [];
+      console.log(savedDiscussions);
+
+      // Fetch all discussions to match saved IDs
+      const discussionsRef = db.collection('discussions');
+      const snapshot = await discussionsRef.get();
+
+      // Filter discussions to include only saved ones
+      discussions.value = savedDiscussions.map((id) => {
+        const doc = snapshot.docs.find((doc) => doc.id === id);
+        return doc ? { id: doc.id, ...doc.data() } : null;
+      }).filter((discussion) => discussion !== null); // Remove null values
+    }
   }
-  // to add the rest of the filtering later
 };
 
 onMounted(() => {

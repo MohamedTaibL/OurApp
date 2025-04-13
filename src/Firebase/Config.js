@@ -20,6 +20,17 @@ firebase.initializeApp(firebaseConfig)
 // we can use projectFirestore variable
 const db = firebase.firestore()
 const auth = firebase.auth()
+
+auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
+  .then(() => {
+    // Existing and future Auth states are now persisted in the current session only.
+    // Closing the window would clear any existing state even if a user forgets to sign out.
+    console.log('Persistence set to LOCAL')
+  }).catch((error) => {
+    // Handle Errors here.
+    console.log(error);
+  }); 
+
 //Step 3 : Export projectFirestore
 // This will enable the use the firebase in different components
 export {auth , db}
