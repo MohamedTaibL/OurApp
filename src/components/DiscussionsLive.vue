@@ -36,14 +36,24 @@ const props = defineProps({
     type: Boolean,
     required: false,
   },
-  Category: {
-    type: Array,
-    required: false,
-  },
   withCreate: {
     type: Boolean,
     required: false,
-  }
+  },
+  search: {
+    type: Object,
+    required: false,
+    /*
+    this will take the format :
+    category: array,
+    subcategory: array,
+    title: string,
+    content: string,
+    startDate: date,
+    endDate: date,
+    userId: string
+    */
+  },
 });
 
 // Fetch user data
@@ -74,9 +84,39 @@ const fetchDiscussions = async () => {
       }
     }
   }
-  if (props.Category) {
-    discussions.value = discussions.value.filter((discussion) => discussion.category.some(cat => props.Category.includes(cat)));
-  }
+  if (props.search){
+    /*
+    this will take the format :
+    category: array,
+    subcategory: array,
+    title: string,
+    content: string,
+    startDate: date,
+    endDate: date,
+    userId: string
+    */
+    if (props.search.category && props.search.category.length > 0) {
+      discussions.value = discussions.value.filter((discussion) => props.search.category.includes(discussion.category));
+    }
+    if (props.search.subcategory && props.search.subcategory.length > 0) {
+      discussions.value = discussions.value.filter((discussion) => props.search.subcategory.includes(discussion.subcategory));
+    }
+    if (props.search.title && props.search.title.length > 0) {
+      discussions.value = discussions.value.filter((discussion) => discussion.title.toLowerCase().includes(props.search.title.toLowerCase()));
+    }
+    if (props.search.content && props.search.content.length > 0) {
+      discussions.value = discussions.value.filter((discussion) => discussion.content.toLowerCase().includes(props.search.content.toLowerCase()));
+    }
+    if (props.search.startDate && props.search.startDate.length > 0) {
+      discussions.value = discussions.value.filter((discussion) => discussion.date >= props.search.startDate);
+    }
+    if (props.search.endDate && props.search.endDate.length > 0) {
+      discussions.value = discussions.value.filter((discussion) => discussion.date <= props.search.endDate);
+    }
+    if (props.search.userId && props.search.userId.length > 0) {
+      discussions.value = discussions.value.filter((discussion) => discussion.userId === props.search.userId);
+    }
+  } 
   // to add the rest of the filtering later
 };
 
@@ -103,7 +143,7 @@ onMounted(() => {
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   width: 800px;
-  margin: 2rem auto;
+  margin: auto auto 2rem auto;
   font-family: 'Poppins', sans-serif;
 }
 
