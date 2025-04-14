@@ -42,7 +42,7 @@
           <span>{{ discussion.comments.length }}</span>
         </div>
         <div class="action" @click.stop="toggleSave">
-          <i :class="isSaved ? 'fas fa-bookmark saved' : 'far fa-bookmark'"></i>
+          <i :class="isSaved ? 'fas fa-bookmark saved' : 'far fa-bookmark'" v-if="!auth.currentUser.isAnonymous"></i>
         </div>
     </div>
 
