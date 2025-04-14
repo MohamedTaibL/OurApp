@@ -37,6 +37,7 @@ const routerViewClass = computed(() => {
 .router-view {
   padding-top: 100px; /* Adjust this value based on your navbar height */
   height: 100%;
+  min-height: 100vh;
 }
 
 .no-padding {

@@ -1,6 +1,6 @@
 <template>
   <div class="discussions-container">
-  <div class="discussion-creator" v-if="!auth.currentUser.isAnonymous && (!props.userId || props.userId == auth.currentUser.uid)">
+  <div class="discussion-creator" v-if="!auth.currentUser.isAnonymous && (!props.userId || props.userId == auth.currentUser.uid) && props.withCreate">
     <div class="user-info">
       <img v-if="userIcon" :src="userIcon" alt="User Icon" class="user-icon" />
     </div>
@@ -32,7 +32,18 @@ const props = defineProps({
     type: String,
     required: false,
   },
-  // to be later added
+  saves: {
+    type: Boolean,
+    required: false,
+  },
+  Category: {
+    type: Array,
+    required: false,
+  },
+  withCreate: {
+    type: Boolean,
+    required: false,
+  }
 });
 
 // Fetch user data
@@ -49,12 +60,22 @@ const fetchDiscussions = async () => {
   const discussionsRef = db.collection('discussions').orderBy('date', 'desc');
   const snapshot = await discussionsRef.get();
   // in case the userId is passed we want to filter the discussions by the userId
+  discussions.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // give it both the id and the data
   if (props.userId) {
-    discussions.value = snapshot.docs
-      .map((doc) => ({ id: doc.id, ...doc.data() }))
-      .filter((discussion) => discussion.userId === props.userId);
-  } else {
-    discussions.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // give it both the id and the data
+    discussions.value = discussions.value.filter((discussion) => discussion.userId === props.userId);
+  }
+  if (props.saves) {
+    // get the saves from the db using the userId
+    const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+      if (userData.savedPosts) {
+        discussions.value = discussions.value.filter((discussion) => userData.savedPosts.includes(discussion.id));
+      }
+    }
+  }
+  if (props.Category) {
+    discussions.value = discussions.value.filter((discussion) => discussion.category.some(cat => props.Category.includes(cat)));
   }
   // to add the rest of the filtering later
 };

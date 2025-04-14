@@ -1,7 +1,7 @@
 <template>
   <div class="home-view"> 
     <h1>Hello {{ userName }} :)</h1>
-    <DiscussionsLive />
+    <DiscussionsLive :withCreate="true" />
   </div>
 </template>
 
