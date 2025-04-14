@@ -1,5 +1,5 @@
 <template>
-  <div class="card-container">
+  <div class="card-container" v-if="!loading">
     <!-- Card Header with User Information -->
     <div class="card-header" >
       <div class="user-icon" @click.stop="goToUser">
@@ -51,6 +51,10 @@
       </div>
     </div>
   </div>
+
+  <div v-else class="loading">
+    <p>Loading...</p>
+  </div>
 </template>
 
 <script setup>
@@ -91,6 +95,7 @@ const userIcon = ref("https://cdn-icons-png.flaticon.com/512/149/149071.png");
 const userName = ref("");
 const isLiked = ref(false);
 const isSaved = ref(false);
+const loading = ref(true); // Loading state for user data
 const isCurrentUser = computed(
   () => auth.currentUser?.uid === props.discussion.userId
 );
@@ -201,6 +206,8 @@ onMounted(async () => {
     const savedPosts = userDoc.data()?.savedPosts || [];
     isSaved.value = savedPosts.includes(props.discussion.id);
   }
+
+  loading.value = false; // Set loading to false after fetching user data
 });
 </script>
 
