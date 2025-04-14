@@ -1,6 +1,6 @@
 <template>
-  <div> <!-- taib please don't use this div :) -->
-    <div class="profile-view">
+  <div class="profile-view"> <!-- taib please don't use this div :) -->
+    <div>
       <div class="profile-container" v-if="!editProfile">
         <!-- Parameters Icon in the Top-Right -->
         <div class="top-right-settings">
@@ -216,14 +216,14 @@
       </div>
     </div>
 
-    <div class="profile-content profile-container profile-posts">
+    <div class="profile-content profile-container profile-posts" v-if="!editProfile">
       <!-- Posts Section -->
-      <div v-if="activeTab === 'posts'">
+      <div v-if="(activeTab === 'posts')">
         <DiscussionsLive :userId="route.params.id" :withCreate="true" />
         <!-- Pass the userId prop to DiscussionsLive -->
         <!-- Add your posts content here -->
       </div>
-      <div v-if="activeTab === 'saves'">
+      <div v-if="(activeTab === 'saves')">
         <DiscussionsLive :saves="true" />
       </div>
     </div>
@@ -748,5 +748,25 @@ watch(
   border-radius: 5px;
   font-size: 1rem;
   box-sizing: border-box;
+}
+
+.profile-view {
+  padding-bottom: 1px;
+  background: linear-gradient(135deg, rgb(242, 239, 231), #48A6A7); /* Gradient background */
+  animation: gradientAnimation 10s ease infinite;
+  
+  /* Gradient animation */
+  @keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
 }
 </style>

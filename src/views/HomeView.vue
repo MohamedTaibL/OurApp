@@ -1,6 +1,6 @@
 <template>
   <div class="home-view"> 
-    <h1>Hello {{ userName }} :)</h1>
+    <h1 style="margin-bottom: 5rem;">Hello {{ userName }} :)</h1>
     <DiscussionsLive :withCreate="true" />
   </div>
 </template>
@@ -42,6 +42,7 @@ onMounted(() => {
 
 <style scoped>
 .home-view {
+  padding-bottom: 20px;
   background: linear-gradient(135deg, rgb(242, 239, 231), #48A6A7); /* Gradient background */
   animation: gradientAnimation 10s ease infinite;
   
