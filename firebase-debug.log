@@ -1,0 +1,384 @@
+[debug] [2025-04-13T15:52:43.081Z] ----------------------------------------------------------------------
+[debug] [2025-04-13T15:52:43.085Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\kaito\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2025-04-13T15:52:43.086Z] CLI Version:   14.1.0
+[debug] [2025-04-13T15:52:43.086Z] Platform:      win32
+[debug] [2025-04-13T15:52:43.086Z] Node Version:  v22.13.1
+[debug] [2025-04-13T15:52:43.087Z] Time:          Sun Apr 13 2025 16:52:43 GMT+0100 (GMT+01:00)
+[debug] [2025-04-13T15:52:43.087Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-04-13T15:52:43.092Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2025-04-13T15:52:43.330Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-04-13T15:52:43.331Z] > authorizing via signed-in user (kaitokid0110@gmail.com)
+[debug] [2025-04-13T15:52:43.331Z] [iam] checking project fir-fec62 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-04-13T15:52:43.331Z] Checked if tokens are valid: false, expires at: 1744313040252
+[debug] [2025-04-13T15:52:43.331Z] Checked if tokens are valid: false, expires at: 1744313040252
+[debug] [2025-04-13T15:52:43.332Z] > refreshing access token with scopes: []
+[debug] [2025-04-13T15:52:43.333Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-04-13T15:52:43.333Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-04-13T15:52:45.343Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2025-04-13T15:52:45.343Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2025-04-13T15:52:45.817Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-04-13T15:52:45.818Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-04-13T15:52:45.825Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/fir-fec62:testIamPermissions [none]
+[debug] [2025-04-13T15:52:45.825Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/fir-fec62:testIamPermissions x-goog-quota-user=projects/fir-fec62
+[debug] [2025-04-13T15:52:45.825Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/fir-fec62:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-04-13T15:52:47.853Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/fir-fec62:testIamPermissions 200
+[debug] [2025-04-13T15:52:47.853Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/fir-fec62:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-04-13T15:52:47.854Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:52:47.854Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:52:47.855Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/fir-fec62 [none]
+[debug] [2025-04-13T15:52:48.583Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/fir-fec62 200
+[debug] [2025-04-13T15:52:48.583Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/fir-fec62 {"projectId":"fir-fec62","projectNumber":"795165833794","displayName":"FireBase","name":"projects/fir-fec62","resources":{"hostingSite":"fir-fec62"},"state":"ACTIVE","etag":"1_0b539e17-cb6f-48c9-b725-fa34d0a7a7dd"}
+[info] 
+[info] === Deploying to 'fir-fec62'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2025-04-13T15:52:48.591Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:52:48.591Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:52:48.591Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions [none]
+[debug] [2025-04-13T15:52:48.591Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2025-04-13T15:52:49.917Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions 200
+[debug] [2025-04-13T15:52:49.917Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions {"name":"projects/795165833794/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[fir-fec62]: beginning deploy... 
+[info] i  hosting[fir-fec62]: found 20 files in dist 
+[debug] [2025-04-13T15:53:09.811Z] [hosting] uploading with 200 concurrency
+[debug] [2025-04-13T15:53:10.330Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:10.330Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:10.336Z] [hosting] hash cache [ZGlzdA] stored for 20 files
+[debug] [2025-04-13T15:53:10.336Z] [hosting][hash queue][FINAL] {"max":502,"min":36,"avg":65.9,"active":0,"complete":20,"success":20,"errored":0,"retried":0,"total":20,"elapsed":516}
+[debug] [2025-04-13T15:53:10.337Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/795165833794/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec:populateFiles [none]
+[debug] [2025-04-13T15:53:10.337Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/795165833794/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec:populateFiles {"files":{"/js/discussion.45f61d0d.js.map":"c791219b260621e6d0413f8ea2c3d86556533d5e8af14dd09a0c82cce84cfd05","/js/profile.2c29858d.js":"f4fde790ff0ef5bda4b3070b2a8925c23bca94e40febd0954f624ea7c987e940","/index.html":"301f0b34cd61d692a5bca7b1523d12e58cbc1bb85a8261a4021241a73ef39b11","/js/sign.f415e8ca.js":"936c42d5ac03b9fe46d15841347d48eab6786eb8c1fff4c852dadbfc5562cba4","/js/discussion.45f61d0d.js":"c528d61b94cc7a0dfaa7d28fca60ec323ad7125eea718c11ba2f6de831116c97","/js/profile.2c29858d.js.map":"34f13bb7ebb2e6b7e21d00f121c5d699f7b8e1aa464b95cd5e2431a5204a36b2","/js/create.8d7810d1.js.map":"4d80b62f19bd8a5d9e6ed64a8a8f035b6370e5de57fee79f0b54439e56d33108","/js/sign.f415e8ca.js.map":"54604717ff9d843ac730753300429ddce84eccb0ed9784c5d006eb323818955d","/js/category.baf737a9.js":"3a42204e9b7e889dff66d873f83906db6bd4afe93040b618c52732fe14cd69c8","/js/create.8d7810d1.js":"76becd5ca877bbf2c6854fd0b45372e63a0581c08e96d55dec148895e2b80d7f","/favicon.ico":"3d3d5c038cc96d71c43ffff92b9bf099f92adf9d867d0849ddcc2086c63c907b","/js/category.baf737a9.js.map":"a11866c06785928a47b89fe24cc49c2dfc3076effe0bd5499fed2eb3850c86d0","/js/app.e607547e.js":"4746f16d87952dbfa6a166cb6f0d22a96e4b5ca293629cb9d3218e77d03cf9d8","/css/create.3d86785f.css":"3c906e16c53a17dbf32f169668b822f9e7aa12905a4b540c8c12ec347058d574","/css/profile.ae72261b.css":"b71c1d154604c88d54e9f49733d38555498036e6e665dd30d3604089828357d5","/css/app.98cf311f.css":"275250ace5a5790d5668befa891363562d2a5db1a268555e3698a48615afaaf9","/js/app.e607547e.js.map":"78cc551150d57f23576e7ba80b5d39cf5abf330b355084bd9b94236a1b039028","/css/sign.a9f97c1d.css":"b9bc263219c5ccd72f6dcc9c5bc1d2a1e07b4828364f3e9886b1f385410e2c20","/js/chunk-vendors.0acfa41c.js":"ac3fbc081ad5d41b7e2713a8ecfa2dd874be5203fa031d991bbc101f3765dedf","/js/chunk-vendors.0acfa41c.js.map":"c092dd1a3b7d361b5ba0b28d56f754805653e5a4327ed1ba35a39954d3a0b94d"}}
+[debug] [2025-04-13T15:53:11.724Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/795165833794/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec:populateFiles 200
+[debug] [2025-04-13T15:53:11.724Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/795165833794/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec:populateFiles {"uploadRequiredHashes":["76becd5ca877bbf2c6854fd0b45372e63a0581c08e96d55dec148895e2b80d7f","34f13bb7ebb2e6b7e21d00f121c5d699f7b8e1aa464b95cd5e2431a5204a36b2","275250ace5a5790d5668befa891363562d2a5db1a268555e3698a48615afaaf9","c528d61b94cc7a0dfaa7d28fca60ec323ad7125eea718c11ba2f6de831116c97","4d80b62f19bd8a5d9e6ed64a8a8f035b6370e5de57fee79f0b54439e56d33108","c791219b260621e6d0413f8ea2c3d86556533d5e8af14dd09a0c82cce84cfd05","ac3fbc081ad5d41b7e2713a8ecfa2dd874be5203fa031d991bbc101f3765dedf","b9bc263219c5ccd72f6dcc9c5bc1d2a1e07b4828364f3e9886b1f385410e2c20","c092dd1a3b7d361b5ba0b28d56f754805653e5a4327ed1ba35a39954d3a0b94d","78cc551150d57f23576e7ba80b5d39cf5abf330b355084bd9b94236a1b039028","f4fde790ff0ef5bda4b3070b2a8925c23bca94e40febd0954f624ea7c987e940","3c906e16c53a17dbf32f169668b822f9e7aa12905a4b540c8c12ec347058d574","3a42204e9b7e889dff66d873f83906db6bd4afe93040b618c52732fe14cd69c8","4746f16d87952dbfa6a166cb6f0d22a96e4b5ca293629cb9d3218e77d03cf9d8","a11866c06785928a47b89fe24cc49c2dfc3076effe0bd5499fed2eb3850c86d0","b71c1d154604c88d54e9f49733d38555498036e6e665dd30d3604089828357d5","936c42d5ac03b9fe46d15841347d48eab6786eb8c1fff4c852dadbfc5562cba4","301f0b34cd61d692a5bca7b1523d12e58cbc1bb85a8261a4021241a73ef39b11","54604717ff9d843ac730753300429ddce84eccb0ed9784c5d006eb323818955d"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files"}
+[debug] [2025-04-13T15:53:11.725Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.725Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.725Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.725Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.725Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.726Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.726Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.726Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.726Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.726Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.726Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.726Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.726Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.727Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.727Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.727Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.727Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.727Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.727Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.727Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.728Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.728Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.728Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.728Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.729Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.729Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.729Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.729Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.729Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.729Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.729Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.729Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.729Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.729Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.729Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.729Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.729Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.730Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:11.730Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/76becd5ca877bbf2c6854fd0b45372e63a0581c08e96d55dec148895e2b80d7f [none]
+[debug] [2025-04-13T15:53:11.730Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/76becd5ca877bbf2c6854fd0b45372e63a0581c08e96d55dec148895e2b80d7f [stream]
+[debug] [2025-04-13T15:53:11.731Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/34f13bb7ebb2e6b7e21d00f121c5d699f7b8e1aa464b95cd5e2431a5204a36b2 [none]
+[debug] [2025-04-13T15:53:11.731Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/34f13bb7ebb2e6b7e21d00f121c5d699f7b8e1aa464b95cd5e2431a5204a36b2 [stream]
+[debug] [2025-04-13T15:53:11.733Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/275250ace5a5790d5668befa891363562d2a5db1a268555e3698a48615afaaf9 [none]
+[debug] [2025-04-13T15:53:11.733Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/275250ace5a5790d5668befa891363562d2a5db1a268555e3698a48615afaaf9 [stream]
+[debug] [2025-04-13T15:53:11.734Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/c528d61b94cc7a0dfaa7d28fca60ec323ad7125eea718c11ba2f6de831116c97 [none]
+[debug] [2025-04-13T15:53:11.734Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/c528d61b94cc7a0dfaa7d28fca60ec323ad7125eea718c11ba2f6de831116c97 [stream]
+[debug] [2025-04-13T15:53:11.737Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/4d80b62f19bd8a5d9e6ed64a8a8f035b6370e5de57fee79f0b54439e56d33108 [none]
+[debug] [2025-04-13T15:53:11.737Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/4d80b62f19bd8a5d9e6ed64a8a8f035b6370e5de57fee79f0b54439e56d33108 [stream]
+[debug] [2025-04-13T15:53:11.740Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/c791219b260621e6d0413f8ea2c3d86556533d5e8af14dd09a0c82cce84cfd05 [none]
+[debug] [2025-04-13T15:53:11.740Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/c791219b260621e6d0413f8ea2c3d86556533d5e8af14dd09a0c82cce84cfd05 [stream]
+[debug] [2025-04-13T15:53:11.742Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/ac3fbc081ad5d41b7e2713a8ecfa2dd874be5203fa031d991bbc101f3765dedf [none]
+[debug] [2025-04-13T15:53:11.742Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/ac3fbc081ad5d41b7e2713a8ecfa2dd874be5203fa031d991bbc101f3765dedf [stream]
+[debug] [2025-04-13T15:53:11.744Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/b9bc263219c5ccd72f6dcc9c5bc1d2a1e07b4828364f3e9886b1f385410e2c20 [none]
+[debug] [2025-04-13T15:53:11.744Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/b9bc263219c5ccd72f6dcc9c5bc1d2a1e07b4828364f3e9886b1f385410e2c20 [stream]
+[debug] [2025-04-13T15:53:11.746Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/c092dd1a3b7d361b5ba0b28d56f754805653e5a4327ed1ba35a39954d3a0b94d [none]
+[debug] [2025-04-13T15:53:11.746Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/c092dd1a3b7d361b5ba0b28d56f754805653e5a4327ed1ba35a39954d3a0b94d [stream]
+[debug] [2025-04-13T15:53:11.748Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/78cc551150d57f23576e7ba80b5d39cf5abf330b355084bd9b94236a1b039028 [none]
+[debug] [2025-04-13T15:53:11.748Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/78cc551150d57f23576e7ba80b5d39cf5abf330b355084bd9b94236a1b039028 [stream]
+[debug] [2025-04-13T15:53:11.751Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/f4fde790ff0ef5bda4b3070b2a8925c23bca94e40febd0954f624ea7c987e940 [none]
+[debug] [2025-04-13T15:53:11.751Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/f4fde790ff0ef5bda4b3070b2a8925c23bca94e40febd0954f624ea7c987e940 [stream]
+[debug] [2025-04-13T15:53:11.751Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/3c906e16c53a17dbf32f169668b822f9e7aa12905a4b540c8c12ec347058d574 [none]
+[debug] [2025-04-13T15:53:11.751Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/3c906e16c53a17dbf32f169668b822f9e7aa12905a4b540c8c12ec347058d574 [stream]
+[debug] [2025-04-13T15:53:11.752Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/3a42204e9b7e889dff66d873f83906db6bd4afe93040b618c52732fe14cd69c8 [none]
+[debug] [2025-04-13T15:53:11.752Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/3a42204e9b7e889dff66d873f83906db6bd4afe93040b618c52732fe14cd69c8 [stream]
+[debug] [2025-04-13T15:53:11.753Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/4746f16d87952dbfa6a166cb6f0d22a96e4b5ca293629cb9d3218e77d03cf9d8 [none]
+[debug] [2025-04-13T15:53:11.753Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/4746f16d87952dbfa6a166cb6f0d22a96e4b5ca293629cb9d3218e77d03cf9d8 [stream]
+[debug] [2025-04-13T15:53:11.754Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/a11866c06785928a47b89fe24cc49c2dfc3076effe0bd5499fed2eb3850c86d0 [none]
+[debug] [2025-04-13T15:53:11.754Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/a11866c06785928a47b89fe24cc49c2dfc3076effe0bd5499fed2eb3850c86d0 [stream]
+[debug] [2025-04-13T15:53:11.755Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/b71c1d154604c88d54e9f49733d38555498036e6e665dd30d3604089828357d5 [none]
+[debug] [2025-04-13T15:53:11.756Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/b71c1d154604c88d54e9f49733d38555498036e6e665dd30d3604089828357d5 [stream]
+[debug] [2025-04-13T15:53:11.756Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/936c42d5ac03b9fe46d15841347d48eab6786eb8c1fff4c852dadbfc5562cba4 [none]
+[debug] [2025-04-13T15:53:11.757Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/936c42d5ac03b9fe46d15841347d48eab6786eb8c1fff4c852dadbfc5562cba4 [stream]
+[debug] [2025-04-13T15:53:11.757Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/301f0b34cd61d692a5bca7b1523d12e58cbc1bb85a8261a4021241a73ef39b11 [none]
+[debug] [2025-04-13T15:53:11.757Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/301f0b34cd61d692a5bca7b1523d12e58cbc1bb85a8261a4021241a73ef39b11 [stream]
+[debug] [2025-04-13T15:53:11.758Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/54604717ff9d843ac730753300429ddce84eccb0ed9784c5d006eb323818955d [none]
+[debug] [2025-04-13T15:53:11.758Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/54604717ff9d843ac730753300429ddce84eccb0ed9784c5d006eb323818955d [stream]
+[debug] [2025-04-13T15:53:11.758Z] [hosting][populate queue][FINAL] {"max":1401,"min":1401,"avg":1401,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":1429}
+[debug] [2025-04-13T15:53:11.758Z] [hosting] uploads queued: 19
+[debug] [2025-04-13T15:53:13.199Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/3a42204e9b7e889dff66d873f83906db6bd4afe93040b618c52732fe14cd69c8 200
+[debug] [2025-04-13T15:53:13.200Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/3a42204e9b7e889dff66d873f83906db6bd4afe93040b618c52732fe14cd69c8 [stream]
+[debug] [2025-04-13T15:53:13.207Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/78cc551150d57f23576e7ba80b5d39cf5abf330b355084bd9b94236a1b039028 200
+[debug] [2025-04-13T15:53:13.207Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/78cc551150d57f23576e7ba80b5d39cf5abf330b355084bd9b94236a1b039028 [stream]
+[debug] [2025-04-13T15:53:13.216Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/4746f16d87952dbfa6a166cb6f0d22a96e4b5ca293629cb9d3218e77d03cf9d8 200
+[debug] [2025-04-13T15:53:13.216Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/4746f16d87952dbfa6a166cb6f0d22a96e4b5ca293629cb9d3218e77d03cf9d8 [stream]
+[debug] [2025-04-13T15:53:13.218Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/c528d61b94cc7a0dfaa7d28fca60ec323ad7125eea718c11ba2f6de831116c97 200
+[debug] [2025-04-13T15:53:13.219Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/c528d61b94cc7a0dfaa7d28fca60ec323ad7125eea718c11ba2f6de831116c97 [stream]
+[debug] [2025-04-13T15:53:13.233Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/54604717ff9d843ac730753300429ddce84eccb0ed9784c5d006eb323818955d 200
+[debug] [2025-04-13T15:53:13.234Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/54604717ff9d843ac730753300429ddce84eccb0ed9784c5d006eb323818955d [stream]
+[debug] [2025-04-13T15:53:13.262Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/c791219b260621e6d0413f8ea2c3d86556533d5e8af14dd09a0c82cce84cfd05 200
+[debug] [2025-04-13T15:53:13.262Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/c791219b260621e6d0413f8ea2c3d86556533d5e8af14dd09a0c82cce84cfd05 [stream]
+[debug] [2025-04-13T15:53:13.297Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/34f13bb7ebb2e6b7e21d00f121c5d699f7b8e1aa464b95cd5e2431a5204a36b2 200
+[debug] [2025-04-13T15:53:13.297Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/34f13bb7ebb2e6b7e21d00f121c5d699f7b8e1aa464b95cd5e2431a5204a36b2 [stream]
+[debug] [2025-04-13T15:53:13.307Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/3c906e16c53a17dbf32f169668b822f9e7aa12905a4b540c8c12ec347058d574 200
+[debug] [2025-04-13T15:53:13.308Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/3c906e16c53a17dbf32f169668b822f9e7aa12905a4b540c8c12ec347058d574 [stream]
+[debug] [2025-04-13T15:53:13.335Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/301f0b34cd61d692a5bca7b1523d12e58cbc1bb85a8261a4021241a73ef39b11 200
+[debug] [2025-04-13T15:53:13.335Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/301f0b34cd61d692a5bca7b1523d12e58cbc1bb85a8261a4021241a73ef39b11 [stream]
+[debug] [2025-04-13T15:53:13.380Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/4d80b62f19bd8a5d9e6ed64a8a8f035b6370e5de57fee79f0b54439e56d33108 200
+[debug] [2025-04-13T15:53:13.381Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/4d80b62f19bd8a5d9e6ed64a8a8f035b6370e5de57fee79f0b54439e56d33108 [stream]
+[debug] [2025-04-13T15:53:13.449Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/f4fde790ff0ef5bda4b3070b2a8925c23bca94e40febd0954f624ea7c987e940 200
+[debug] [2025-04-13T15:53:13.449Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/f4fde790ff0ef5bda4b3070b2a8925c23bca94e40febd0954f624ea7c987e940 [stream]
+[debug] [2025-04-13T15:53:13.477Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/76becd5ca877bbf2c6854fd0b45372e63a0581c08e96d55dec148895e2b80d7f 200
+[debug] [2025-04-13T15:53:13.477Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/76becd5ca877bbf2c6854fd0b45372e63a0581c08e96d55dec148895e2b80d7f [stream]
+[debug] [2025-04-13T15:53:13.499Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/b9bc263219c5ccd72f6dcc9c5bc1d2a1e07b4828364f3e9886b1f385410e2c20 200
+[debug] [2025-04-13T15:53:13.499Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/b9bc263219c5ccd72f6dcc9c5bc1d2a1e07b4828364f3e9886b1f385410e2c20 [stream]
+[debug] [2025-04-13T15:53:13.512Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/a11866c06785928a47b89fe24cc49c2dfc3076effe0bd5499fed2eb3850c86d0 200
+[debug] [2025-04-13T15:53:13.512Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/a11866c06785928a47b89fe24cc49c2dfc3076effe0bd5499fed2eb3850c86d0 [stream]
+[debug] [2025-04-13T15:53:13.515Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/b71c1d154604c88d54e9f49733d38555498036e6e665dd30d3604089828357d5 200
+[debug] [2025-04-13T15:53:13.515Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/b71c1d154604c88d54e9f49733d38555498036e6e665dd30d3604089828357d5 [stream]
+[debug] [2025-04-13T15:53:13.534Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/275250ace5a5790d5668befa891363562d2a5db1a268555e3698a48615afaaf9 200
+[debug] [2025-04-13T15:53:13.534Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/275250ace5a5790d5668befa891363562d2a5db1a268555e3698a48615afaaf9 [stream]
+[debug] [2025-04-13T15:53:13.569Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/ac3fbc081ad5d41b7e2713a8ecfa2dd874be5203fa031d991bbc101f3765dedf 200
+[debug] [2025-04-13T15:53:13.570Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/ac3fbc081ad5d41b7e2713a8ecfa2dd874be5203fa031d991bbc101f3765dedf [stream]
+[debug] [2025-04-13T15:53:13.623Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/936c42d5ac03b9fe46d15841347d48eab6786eb8c1fff4c852dadbfc5562cba4 200
+[debug] [2025-04-13T15:53:13.624Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/936c42d5ac03b9fe46d15841347d48eab6786eb8c1fff4c852dadbfc5562cba4 [stream]
+[debug] [2025-04-13T15:53:17.175Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/c092dd1a3b7d361b5ba0b28d56f754805653e5a4327ed1ba35a39954d3a0b94d 200
+[debug] [2025-04-13T15:53:17.175Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec/files/c092dd1a3b7d361b5ba0b28d56f754805653e5a4327ed1ba35a39954d3a0b94d [stream]
+[debug] [2025-04-13T15:53:17.176Z] [hosting][upload queue][FINAL] {"max":5448,"min":1472,"avg":1852.5263157894738,"active":0,"complete":19,"success":19,"errored":0,"retried":0,"total":19,"elapsed":5451}
+[info] +  hosting[fir-fec62]: file upload complete 
+[debug] [2025-04-13T15:53:17.177Z] [hosting] deploy completed after 7407ms
+[debug] [2025-04-13T15:53:17.177Z] [
+  {
+    "config": {
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "fir-fec62"
+    },
+    "version": "projects/795165833794/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec"
+  }
+]
+[info] i  hosting[fir-fec62]: finalizing version... 
+[debug] [2025-04-13T15:53:17.180Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:17.181Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:17.181Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec updateMask=status%2Cconfig
+[debug] [2025-04-13T15:53:17.181Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}}
+[debug] [2025-04-13T15:53:18.523Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec 200
+[debug] [2025-04-13T15:53:18.523Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec {"name":"projects/795165833794/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2025-04-13T15:52:49.475275Z","createUser":{"email":"kaitokid0110@gmail.com"},"finalizeTime":"2025-04-13T15:53:18.347468Z","finalizeUser":{"email":"kaitokid0110@gmail.com"}}
+[debug] [2025-04-13T15:53:18.523Z] [hosting] finalized version for fir-fec62:[object Object]
+[info] +  hosting[fir-fec62]: version finalized 
+[info] i  hosting[fir-fec62]: releasing new version... 
+[debug] [2025-04-13T15:53:18.524Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:18.524Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T15:53:18.524Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/channels/live/releases versionName=projects%2F795165833794%2Fsites%2Ffir-fec62%2Fversions%2Fc4fcb0c1b4d7a3ec
+[debug] [2025-04-13T15:53:18.525Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/channels/live/releases {}
+[debug] [2025-04-13T15:53:19.593Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/channels/live/releases 200
+[debug] [2025-04-13T15:53:19.593Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/channels/live/releases {"name":"projects/795165833794/sites/fir-fec62/channels/live/releases/1744559598682000","version":{"name":"projects/795165833794/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2025-04-13T15:52:49.475275Z","createUser":{"email":"kaitokid0110@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKqRGsBAyodWmxIKlfWvqQPA0vG-7uUK04YsMvHwKW8qNukaABT"},"finalizeTime":"2025-04-13T15:53:18.347468Z","finalizeUser":{"email":"kaitokid0110@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKqRGsBAyodWmxIKlfWvqQPA0vG-7uUK04YsMvHwKW8qNukaABT"}},"type":"DEPLOY","releaseTime":"2025-04-13T15:53:18.682Z","releaseUser":{"email":"kaitokid0110@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKqRGsBAyodWmxIKlfWvqQPA0vG-7uUK04YsMvHwKW8qNukaABT"}}
+[debug] [2025-04-13T15:53:19.593Z] [hosting] release: {"name":"projects/795165833794/sites/fir-fec62/channels/live/releases/1744559598682000","version":{"name":"projects/795165833794/sites/fir-fec62/versions/c4fcb0c1b4d7a3ec","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2025-04-13T15:52:49.475275Z","createUser":{"email":"kaitokid0110@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKqRGsBAyodWmxIKlfWvqQPA0vG-7uUK04YsMvHwKW8qNukaABT"},"finalizeTime":"2025-04-13T15:53:18.347468Z","finalizeUser":{"email":"kaitokid0110@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKqRGsBAyodWmxIKlfWvqQPA0vG-7uUK04YsMvHwKW8qNukaABT"}},"type":"DEPLOY","releaseTime":"2025-04-13T15:53:18.682Z","releaseUser":{"email":"kaitokid0110@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKqRGsBAyodWmxIKlfWvqQPA0vG-7uUK04YsMvHwKW8qNukaABT"}}
+[info] +  hosting[fir-fec62]: release complete 
+[info] 
+[info] +  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/fir-fec62/overview
+[info] Hosting URL: https://fir-fec62.web.app
+[debug] [2025-04-13T15:53:50.654Z] Error: Timed out.
+    at Timeout._onTimeout (C:\Users\kaito\AppData\Roaming\npm\node_modules\firebase-tools\lib\utils.js:269:49)
+    at listOnTimeout (node:internal/timers:594:17)
+    at process.processTimers (node:internal/timers:529:7)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2025-04-13T16:18:36.134Z] ----------------------------------------------------------------------
+[debug] [2025-04-13T16:18:36.138Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\kaito\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2025-04-13T16:18:36.139Z] CLI Version:   14.1.0
+[debug] [2025-04-13T16:18:36.139Z] Platform:      win32
+[debug] [2025-04-13T16:18:36.139Z] Node Version:  v22.13.1
+[debug] [2025-04-13T16:18:36.140Z] Time:          Sun Apr 13 2025 17:18:36 GMT+0100 (GMT+01:00)
+[debug] [2025-04-13T16:18:36.140Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-04-13T16:18:36.352Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-04-13T16:18:36.353Z] > authorizing via signed-in user (kaitokid0110@gmail.com)
+[debug] [2025-04-13T16:18:36.353Z] [iam] checking project fir-fec62 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-04-13T16:18:36.354Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:18:36.354Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:18:36.355Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/fir-fec62:testIamPermissions [none]
+[debug] [2025-04-13T16:18:36.355Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/fir-fec62:testIamPermissions x-goog-quota-user=projects/fir-fec62
+[debug] [2025-04-13T16:18:36.355Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/fir-fec62:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-04-13T16:18:38.120Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/fir-fec62:testIamPermissions 200
+[debug] [2025-04-13T16:18:38.120Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/fir-fec62:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-04-13T16:18:38.121Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:18:38.122Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:18:38.122Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/fir-fec62 [none]
+[debug] [2025-04-13T16:18:39.132Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/fir-fec62 200
+[debug] [2025-04-13T16:18:39.132Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/fir-fec62 {"projectId":"fir-fec62","projectNumber":"795165833794","displayName":"FireBase","name":"projects/fir-fec62","resources":{"hostingSite":"fir-fec62"},"state":"ACTIVE","etag":"1_0b539e17-cb6f-48c9-b725-fa34d0a7a7dd"}
+[info] 
+[info] === Deploying to 'fir-fec62'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2025-04-13T16:18:39.143Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:18:39.144Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:18:39.144Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions [none]
+[debug] [2025-04-13T16:18:39.144Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2025-04-13T16:18:40.975Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions 200
+[debug] [2025-04-13T16:18:40.975Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions {"name":"projects/795165833794/sites/fir-fec62/versions/095edf0f73cbed79","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[fir-fec62]: beginning deploy... 
+[info] i  hosting[fir-fec62]: found 20 files in dist 
+[debug] [2025-04-13T16:19:00.206Z] [hosting] uploading with 200 concurrency
+[debug] [2025-04-13T16:19:00.946Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:00.946Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:00.950Z] [hosting] hash cache [ZGlzdA] stored for 20 files
+[debug] [2025-04-13T16:19:00.951Z] [hosting][hash queue][FINAL] {"max":732,"min":13,"avg":52.05,"active":0,"complete":20,"success":20,"errored":0,"retried":0,"total":20,"elapsed":742}
+[debug] [2025-04-13T16:19:00.951Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/795165833794/sites/fir-fec62/versions/095edf0f73cbed79:populateFiles [none]
+[debug] [2025-04-13T16:19:00.952Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/795165833794/sites/fir-fec62/versions/095edf0f73cbed79:populateFiles {"files":{"/index.html":"7b6fb1ccd5b8d83354893c5395d10c6a405ff801968ba6318639bc7e84abc204","/favicon.ico":"3d3d5c038cc96d71c43ffff92b9bf099f92adf9d867d0849ddcc2086c63c907b","/js/sign.1edf83f3.js":"ae160c74a9f4baba331408f82053f8cd1d6add48b438c8ac37259bbbc2e595ea","/js/discussion.45f61d0d.js.map":"c791219b260621e6d0413f8ea2c3d86556533d5e8af14dd09a0c82cce84cfd05","/js/discussion.45f61d0d.js":"c528d61b94cc7a0dfaa7d28fca60ec323ad7125eea718c11ba2f6de831116c97","/js/sign.1edf83f3.js.map":"71c986f36c15297d01e3d3140d52bbfb203b61e50d8e849e1b8ea4cf63fe08a6","/js/profile.027a1f67.js":"306892bc0f11453c5b70e8b61edfd6454d32134b67e282e562e22cf646f3b3d0","/js/create.004934c1.js.map":"9cab97fefa592623b5d34323e279def43e71d52aec5bfbe511697792a58407a7","/js/category.baf737a9.js":"3a42204e9b7e889dff66d873f83906db6bd4afe93040b618c52732fe14cd69c8","/js/app.a6ce1d85.js":"88b1e8bd9644631d772555987a1af4661647f7272f02b60b5f13303d7ba43c35","/css/profile.ae72261b.css":"b71c1d154604c88d54e9f49733d38555498036e6e665dd30d3604089828357d5","/js/create.004934c1.js":"6e713a1e10f3ee406f4df73506fdcb6ba9ebc96e55ad169459be00962f3fdfab","/css/create.3d86785f.css":"3c906e16c53a17dbf32f169668b822f9e7aa12905a4b540c8c12ec347058d574","/js/profile.027a1f67.js.map":"9e0fa934ab8bb8832ce38960b0c88007cce542ed696ae9eda04a1841ec3d292b","/js/category.baf737a9.js.map":"a11866c06785928a47b89fe24cc49c2dfc3076effe0bd5499fed2eb3850c86d0","/js/app.a6ce1d85.js.map":"6267d85acd059111a5a9177b53645bed4af48a432bb647dc08e84edf176524c7","/css/app.98cf311f.css":"275250ace5a5790d5668befa891363562d2a5db1a268555e3698a48615afaaf9","/css/sign.a9f97c1d.css":"b9bc263219c5ccd72f6dcc9c5bc1d2a1e07b4828364f3e9886b1f385410e2c20","/js/chunk-vendors.ed5b64e2.js":"15f131de399bc0608ff26eede73036957dff2ab70971f46822b13e00cfc76a59","/js/chunk-vendors.ed5b64e2.js.map":"177bef00c08314522a9abd27b02c333c033d1b381ffdb948c0195eae21dc3f62"}}
+[debug] [2025-04-13T16:19:02.077Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/795165833794/sites/fir-fec62/versions/095edf0f73cbed79:populateFiles 200
+[debug] [2025-04-13T16:19:02.078Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/795165833794/sites/fir-fec62/versions/095edf0f73cbed79:populateFiles {"uploadRequiredHashes":["6267d85acd059111a5a9177b53645bed4af48a432bb647dc08e84edf176524c7","306892bc0f11453c5b70e8b61edfd6454d32134b67e282e562e22cf646f3b3d0","9cab97fefa592623b5d34323e279def43e71d52aec5bfbe511697792a58407a7","71c986f36c15297d01e3d3140d52bbfb203b61e50d8e849e1b8ea4cf63fe08a6","9e0fa934ab8bb8832ce38960b0c88007cce542ed696ae9eda04a1841ec3d292b","6e713a1e10f3ee406f4df73506fdcb6ba9ebc96e55ad169459be00962f3fdfab","15f131de399bc0608ff26eede73036957dff2ab70971f46822b13e00cfc76a59","7b6fb1ccd5b8d83354893c5395d10c6a405ff801968ba6318639bc7e84abc204","88b1e8bd9644631d772555987a1af4661647f7272f02b60b5f13303d7ba43c35","ae160c74a9f4baba331408f82053f8cd1d6add48b438c8ac37259bbbc2e595ea","177bef00c08314522a9abd27b02c333c033d1b381ffdb948c0195eae21dc3f62"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files"}
+[debug] [2025-04-13T16:19:02.081Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.081Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.082Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.082Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.082Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.083Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.083Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.083Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.084Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.084Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.084Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.084Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.085Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.085Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.085Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.085Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.086Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.086Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.086Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.086Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.086Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.087Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:02.087Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/6267d85acd059111a5a9177b53645bed4af48a432bb647dc08e84edf176524c7 [none]
+[debug] [2025-04-13T16:19:02.087Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/6267d85acd059111a5a9177b53645bed4af48a432bb647dc08e84edf176524c7 [stream]
+[debug] [2025-04-13T16:19:02.091Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/306892bc0f11453c5b70e8b61edfd6454d32134b67e282e562e22cf646f3b3d0 [none]
+[debug] [2025-04-13T16:19:02.091Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/306892bc0f11453c5b70e8b61edfd6454d32134b67e282e562e22cf646f3b3d0 [stream]
+[debug] [2025-04-13T16:19:02.094Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/9cab97fefa592623b5d34323e279def43e71d52aec5bfbe511697792a58407a7 [none]
+[debug] [2025-04-13T16:19:02.095Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/9cab97fefa592623b5d34323e279def43e71d52aec5bfbe511697792a58407a7 [stream]
+[debug] [2025-04-13T16:19:02.097Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/71c986f36c15297d01e3d3140d52bbfb203b61e50d8e849e1b8ea4cf63fe08a6 [none]
+[debug] [2025-04-13T16:19:02.097Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/71c986f36c15297d01e3d3140d52bbfb203b61e50d8e849e1b8ea4cf63fe08a6 [stream]
+[debug] [2025-04-13T16:19:02.101Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/9e0fa934ab8bb8832ce38960b0c88007cce542ed696ae9eda04a1841ec3d292b [none]
+[debug] [2025-04-13T16:19:02.101Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/9e0fa934ab8bb8832ce38960b0c88007cce542ed696ae9eda04a1841ec3d292b [stream]
+[debug] [2025-04-13T16:19:02.104Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/6e713a1e10f3ee406f4df73506fdcb6ba9ebc96e55ad169459be00962f3fdfab [none]
+[debug] [2025-04-13T16:19:02.104Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/6e713a1e10f3ee406f4df73506fdcb6ba9ebc96e55ad169459be00962f3fdfab [stream]
+[debug] [2025-04-13T16:19:02.107Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/15f131de399bc0608ff26eede73036957dff2ab70971f46822b13e00cfc76a59 [none]
+[debug] [2025-04-13T16:19:02.108Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/15f131de399bc0608ff26eede73036957dff2ab70971f46822b13e00cfc76a59 [stream]
+[debug] [2025-04-13T16:19:02.110Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/7b6fb1ccd5b8d83354893c5395d10c6a405ff801968ba6318639bc7e84abc204 [none]
+[debug] [2025-04-13T16:19:02.110Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/7b6fb1ccd5b8d83354893c5395d10c6a405ff801968ba6318639bc7e84abc204 [stream]
+[debug] [2025-04-13T16:19:02.114Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/88b1e8bd9644631d772555987a1af4661647f7272f02b60b5f13303d7ba43c35 [none]
+[debug] [2025-04-13T16:19:02.114Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/88b1e8bd9644631d772555987a1af4661647f7272f02b60b5f13303d7ba43c35 [stream]
+[debug] [2025-04-13T16:19:02.117Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/ae160c74a9f4baba331408f82053f8cd1d6add48b438c8ac37259bbbc2e595ea [none]
+[debug] [2025-04-13T16:19:02.118Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/ae160c74a9f4baba331408f82053f8cd1d6add48b438c8ac37259bbbc2e595ea [stream]
+[debug] [2025-04-13T16:19:02.121Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/177bef00c08314522a9abd27b02c333c033d1b381ffdb948c0195eae21dc3f62 [none]
+[debug] [2025-04-13T16:19:02.121Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/177bef00c08314522a9abd27b02c333c033d1b381ffdb948c0195eae21dc3f62 [stream]
+[debug] [2025-04-13T16:19:02.123Z] [hosting][populate queue][FINAL] {"max":1142,"min":1142,"avg":1142,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":1178}
+[debug] [2025-04-13T16:19:02.123Z] [hosting] uploads queued: 11
+[debug] [2025-04-13T16:19:03.402Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/6267d85acd059111a5a9177b53645bed4af48a432bb647dc08e84edf176524c7 200
+[debug] [2025-04-13T16:19:03.403Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/6267d85acd059111a5a9177b53645bed4af48a432bb647dc08e84edf176524c7 [stream]
+[debug] [2025-04-13T16:19:03.404Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/6e713a1e10f3ee406f4df73506fdcb6ba9ebc96e55ad169459be00962f3fdfab 200
+[debug] [2025-04-13T16:19:03.404Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/6e713a1e10f3ee406f4df73506fdcb6ba9ebc96e55ad169459be00962f3fdfab [stream]
+[debug] [2025-04-13T16:19:03.405Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/ae160c74a9f4baba331408f82053f8cd1d6add48b438c8ac37259bbbc2e595ea 200
+[debug] [2025-04-13T16:19:03.405Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/ae160c74a9f4baba331408f82053f8cd1d6add48b438c8ac37259bbbc2e595ea [stream]
+[debug] [2025-04-13T16:19:03.407Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/71c986f36c15297d01e3d3140d52bbfb203b61e50d8e849e1b8ea4cf63fe08a6 200
+[debug] [2025-04-13T16:19:03.407Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/71c986f36c15297d01e3d3140d52bbfb203b61e50d8e849e1b8ea4cf63fe08a6 [stream]
+[debug] [2025-04-13T16:19:03.409Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/88b1e8bd9644631d772555987a1af4661647f7272f02b60b5f13303d7ba43c35 200
+[debug] [2025-04-13T16:19:03.410Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/88b1e8bd9644631d772555987a1af4661647f7272f02b60b5f13303d7ba43c35 [stream]
+[debug] [2025-04-13T16:19:03.412Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/7b6fb1ccd5b8d83354893c5395d10c6a405ff801968ba6318639bc7e84abc204 200
+[debug] [2025-04-13T16:19:03.412Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/7b6fb1ccd5b8d83354893c5395d10c6a405ff801968ba6318639bc7e84abc204 [stream]
+[debug] [2025-04-13T16:19:03.413Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/9cab97fefa592623b5d34323e279def43e71d52aec5bfbe511697792a58407a7 200
+[debug] [2025-04-13T16:19:03.413Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/9cab97fefa592623b5d34323e279def43e71d52aec5bfbe511697792a58407a7 [stream]
+[debug] [2025-04-13T16:19:03.663Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/306892bc0f11453c5b70e8b61edfd6454d32134b67e282e562e22cf646f3b3d0 200
+[debug] [2025-04-13T16:19:03.663Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/306892bc0f11453c5b70e8b61edfd6454d32134b67e282e562e22cf646f3b3d0 [stream]
+[debug] [2025-04-13T16:19:03.664Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/9e0fa934ab8bb8832ce38960b0c88007cce542ed696ae9eda04a1841ec3d292b 200
+[debug] [2025-04-13T16:19:03.664Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/9e0fa934ab8bb8832ce38960b0c88007cce542ed696ae9eda04a1841ec3d292b [stream]
+[debug] [2025-04-13T16:19:03.890Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/15f131de399bc0608ff26eede73036957dff2ab70971f46822b13e00cfc76a59 200
+[debug] [2025-04-13T16:19:03.891Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/15f131de399bc0608ff26eede73036957dff2ab70971f46822b13e00cfc76a59 [stream]
+[debug] [2025-04-13T16:19:04.065Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/177bef00c08314522a9abd27b02c333c033d1b381ffdb948c0195eae21dc3f62 200
+[debug] [2025-04-13T16:19:04.066Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/fir-fec62/versions/095edf0f73cbed79/files/177bef00c08314522a9abd27b02c333c033d1b381ffdb948c0195eae21dc3f62 [stream]
+[debug] [2025-04-13T16:19:04.066Z] [hosting][upload queue][FINAL] {"max":1980,"min":1320,"avg":1474.4545454545455,"active":0,"complete":11,"success":11,"errored":0,"retried":0,"total":11,"elapsed":1987}
+[info] +  hosting[fir-fec62]: file upload complete 
+[debug] [2025-04-13T16:19:04.068Z] [hosting] deploy completed after 3879ms
+[debug] [2025-04-13T16:19:04.068Z] [
+  {
+    "config": {
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "fir-fec62"
+    },
+    "version": "projects/795165833794/sites/fir-fec62/versions/095edf0f73cbed79"
+  }
+]
+[info] i  hosting[fir-fec62]: finalizing version... 
+[debug] [2025-04-13T16:19:04.072Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:04.072Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:04.073Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions/095edf0f73cbed79 updateMask=status%2Cconfig
+[debug] [2025-04-13T16:19:04.073Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions/095edf0f73cbed79 {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}}
+[debug] [2025-04-13T16:19:04.294Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions/095edf0f73cbed79 200
+[debug] [2025-04-13T16:19:04.294Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/versions/095edf0f73cbed79 {"name":"projects/795165833794/sites/fir-fec62/versions/095edf0f73cbed79","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2025-04-13T16:18:40.255417Z","createUser":{"email":"kaitokid0110@gmail.com"},"finalizeTime":"2025-04-13T16:19:04.190423Z","finalizeUser":{"email":"kaitokid0110@gmail.com"}}
+[debug] [2025-04-13T16:19:04.294Z] [hosting] finalized version for fir-fec62:[object Object]
+[info] +  hosting[fir-fec62]: version finalized 
+[info] i  hosting[fir-fec62]: releasing new version... 
+[debug] [2025-04-13T16:19:04.296Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:04.296Z] Checked if tokens are valid: true, expires at: 1744563164818
+[debug] [2025-04-13T16:19:04.297Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/channels/live/releases versionName=projects%2F795165833794%2Fsites%2Ffir-fec62%2Fversions%2F095edf0f73cbed79
+[debug] [2025-04-13T16:19:04.297Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/channels/live/releases {}
+[debug] [2025-04-13T16:19:04.800Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/channels/live/releases 200
+[debug] [2025-04-13T16:19:04.800Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/fir-fec62/channels/live/releases {"name":"projects/795165833794/sites/fir-fec62/channels/live/releases/1744561144156000","version":{"name":"projects/795165833794/sites/fir-fec62/versions/095edf0f73cbed79","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2025-04-13T16:18:40.255417Z","createUser":{"email":"kaitokid0110@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKqRGsBAyodWmxIKlfWvqQPA0vG-7uUK04YsMvHwKW8qNukaABT"},"finalizeTime":"2025-04-13T16:19:04.190423Z","finalizeUser":{"email":"kaitokid0110@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKqRGsBAyodWmxIKlfWvqQPA0vG-7uUK04YsMvHwKW8qNukaABT"}},"type":"DEPLOY","releaseTime":"2025-04-13T16:19:04.156Z","releaseUser":{"email":"kaitokid0110@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKqRGsBAyodWmxIKlfWvqQPA0vG-7uUK04YsMvHwKW8qNukaABT"}}
+[debug] [2025-04-13T16:19:04.801Z] [hosting] release: {"name":"projects/795165833794/sites/fir-fec62/channels/live/releases/1744561144156000","version":{"name":"projects/795165833794/sites/fir-fec62/versions/095edf0f73cbed79","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2025-04-13T16:18:40.255417Z","createUser":{"email":"kaitokid0110@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKqRGsBAyodWmxIKlfWvqQPA0vG-7uUK04YsMvHwKW8qNukaABT"},"finalizeTime":"2025-04-13T16:19:04.190423Z","finalizeUser":{"email":"kaitokid0110@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKqRGsBAyodWmxIKlfWvqQPA0vG-7uUK04YsMvHwKW8qNukaABT"}},"type":"DEPLOY","releaseTime":"2025-04-13T16:19:04.156Z","releaseUser":{"email":"kaitokid0110@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocKqRGsBAyodWmxIKlfWvqQPA0vG-7uUK04YsMvHwKW8qNukaABT"}}
+[info] +  hosting[fir-fec62]: release complete 
+[info] 
+[info] +  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/fir-fec62/overview
+[info] Hosting URL: https://fir-fec62.web.app
+[debug] [2025-04-13T16:19:35.885Z] Error: Timed out.
+    at Timeout._onTimeout (C:\Users\kaito\AppData\Roaming\npm\node_modules\firebase-tools\lib\utils.js:269:49)
+    at listOnTimeout (node:internal/timers:594:17)
+    at process.processTimers (node:internal/timers:529:7)
+[error] 
+[error] Error: An unexpected error has occurred.

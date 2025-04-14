@@ -57,10 +57,11 @@
             v-if="!user.isAnonymous && userId === useRoute().params.id"
           >
             <!-- Only show Saves tab if the user is the profile owner -->
-            Saves
-          </button>
-        </div>
+          Saves
+        </button>
       </div>
+    </div>
+   
 
       <div class="edit-profile-container" v-if="editProfile">
         <!-- Change Password Section -->
@@ -261,6 +262,7 @@ const editDate = ref("");
 
 const user = auth.currentUser;
 const userId = user.uid;
+
 
 const loadData = (userId) => {
   db.collection("users")

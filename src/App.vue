@@ -7,6 +7,7 @@
 import NavBar from './components/NavBar.vue';
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
+import 'firebase/auth'; // Import Firebase auth module
 // if the current route is "/sign" take of the margin-top of the router-view
 
 const route = useRoute();

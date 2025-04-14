@@ -49,22 +49,47 @@ const router = createRouter({
   routes
 })
 
+let isLoggedIn = false; // Variable to track if the user is logged in
+
+
+function isAuthenticated(to, next) {
+  if (to.name !== 'sign' && !isLoggedIn) {
+    // If the user is not logged in and trying to access a protected route, redirect to sign page
+    next({ name: 'sign' });
+  } else {
+    next(); // Allow navigation to the requested route
+  }
+}
+
+function isntAuthenticated(to, next) {
+  if (to.name === 'sign' && isLoggedIn) {
+    // If the user is logged in and trying to access the sign page, redirect to home page
+    next({ name: 'home' });
+  } else {
+    next(); // Allow navigation to the requested route
+  }
+}
+
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    isLoggedIn = true; // User is logged in*
+    // take the user to the home page if he logged in
+    router.push({ name: 'home' });
+  } else {
+    isLoggedIn = false; // User is logged out
+    // take the user to the sign page if he logged out
+    router.push({ name: 'sign' });
+  }
+});
 
 router.beforeEach((to, from, next) => {
-  const user = auth.currentUser;
-
-  // Protect routes that should only be accessed by authenticated users
-  if (to.path !== '/sign' && !user) {
-    next('/sign');  // Redirect to sign-in page if not authenticated
+  if (to.name !== 'sign') {
+    isAuthenticated(to, next); // Check if the user is authenticated for non-sign routes
+  } else {
+    isntAuthenticated(to, next); // Check if the user is authenticated for sign route
   }
-  // inCase the user is already logged in and tries to access the sign-in page
-  else if (to.path === '/sign' && user) {
-    next('/user');  // Redirect to home page if already authenticated
-  }
-  else {
-    next();  // Proceed to the requested route
-  } 
-
 });
+
+
 
 export default router
