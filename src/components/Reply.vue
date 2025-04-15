@@ -38,9 +38,10 @@
 </template>
 
 <script setup>
-import { defineProps, computed, ref } from 'vue';
+import { defineEmits, defineProps, computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { auth, db } from '@/Firebase/Config'; // Import your Firebase configuration
+
 
 // Define props
 const props = defineProps({
@@ -49,6 +50,8 @@ const props = defineProps({
     required: true,
   },
 });
+
+const emit = defineEmits(["deleteReply"]);
 
 console.log("Props discussions id: " , props.reply.discussionId);
 
@@ -125,10 +128,12 @@ const handleDelete = async () => {
       await REPLIES.update({ comments: updatedReplies });
       console.log("Reply deleted successfully!");
       deleted.value = true; // Mark the reply as deleted in the UI
+      
     } catch (error) {
       console.error("Error deleting reply:", error);
       alert("Failed to delete the reply. Please try again.");
-
+    } finally {
+      emit("deleteReply"); // Emit an event to notify the parent component about the deletion
 
     }}}
 </script>

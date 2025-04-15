@@ -20,7 +20,7 @@
 
 <template>
     <div>
-    <Card v-if="currentDiscussion" :discussion="currentDiscussion"/>
+    <Card v-if="currentDiscussion" :discussion="currentDiscussion" :key="Cardkey" @remount="remountCard"/>
     <div v-else class="loading">
         <p>Loading...</p>
     </div>
@@ -43,6 +43,7 @@ const currentDiscussion = ref(null);
 const route = useRoute();
 const discussionId = route.params.id; // Get the discussion ID from the route parameters
 const isReply = route.params.isReply; // Get the isReply parameter from the route
+const Cardkey = ref(0);
 
 
 //Variables to print
@@ -81,7 +82,9 @@ const fetchDiscussion = async () => {
 
 
 
-
+const remountCard = () => {
+    Cardkey.value += 1; // Increment the key to force re-rendering of the Card component
+};
 
 
 

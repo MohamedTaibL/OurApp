@@ -39,7 +39,7 @@
         </div>
         <div class="action" @click.stop="goToDiscussion">
           <i class="far fa-comment" ></i>
-          <span>{{ discussion.comments.length }}</span>
+          <span>{{ discussion.comments.length}}</span>
         </div>
         <div class="action" @click.stop="toggleSave">
           <i :class="isSaved ? 'fas fa-bookmark saved' : 'far fa-bookmark'" v-if="!auth.currentUser.isAnonymous"></i>
@@ -70,7 +70,7 @@
     <!-- Now done with printing the discussion and the reply input, we will now show the replies -->
 
     
-     <Reply v-if="replies" v-for="reply in replies" :key="reply.id" :reply="reply" :userId="reply.userId" :discussionId="props.discussion.id" />
+     <Reply v-if="replies" v-for="reply in replies" :key="reply.id" :reply="reply" :userId="reply.userId" :discussionId="props.discussion.id" @deleteReply="reload" />
      <div v-else>
         <p>Loading...</p>
      </div>
@@ -98,6 +98,8 @@
       required: true,
     },
   });
+
+  const emit = defineEmits(["remount"]);
   
   // discussion is passed with :
   /*
@@ -131,8 +133,7 @@
     () => auth.currentUser?.uid === props.discussion.userId
   );
   const authuser = ref({})
-
-  
+  const commentNum = ref(props.discussion.comments.length);
   const formattedDate = computed(() => {
     if (!props.discussion.date?.seconds) return "";
     const dateObj = new Date(props.discussion.date.seconds * 1000);
@@ -266,10 +267,19 @@
     //Then I want to add the replyId to the discussion replies array
     await db.collection("discussions").doc(props.discussion.id).update({
       comments: [...props.discussion.comments, replyId],
+
     });
+
     replyContent.value = "";
+    props.discussion.comments = (await (db.collection("discussions").doc(props.discussion.id)).get()).data().comments;
+    emit("remount"); // Emit the remount event to refresh the discussion view
     
 
+  }
+
+  const reload = async () =>{
+    props.discussion.comments = (await (db.collection("discussions").doc(props.discussion.id)).get()).data().comments;
+    console.log("RELOAD ACTUALLY WORKING");
   }
   onMounted(async () => {
     await getTheUserIconandName();
