@@ -4,7 +4,11 @@
     <div class="card-header" >
       <div class="user-icon" @click.stop="goToUser">
         <img :src="userIcon" alt="User Icon" />
-        <p>{{ userName }}</p>
+        <div style="display:flex; flex-direction: column; align-items: flex-start; margin-left:0.4rem; gap:0rem;">
+        <p class="name" style="">{{ Name }}</p>
+        <p class="username">@{{ userName }}</p>
+        </div>
+        
       </div>
       <div class="options-icon" v-if="isCurrentUser">
         <i class="fas fa-ellipsis-h"></i>
@@ -93,6 +97,7 @@ const props = defineProps({
 const router = useRouter();
 const userIcon = ref("https://cdn-icons-png.flaticon.com/512/149/149071.png");
 const userName = ref("");
+const Name = ref("");
 const isLiked = ref(false);
 const isSaved = ref(false);
 const loading = ref(true); // Loading state for user data
@@ -117,7 +122,8 @@ const getTheUserIconandName = async () => {
     userIcon.value =
       userData.imageURL ||
       "https://cdn-icons-png.flaticon.com/512/149/149071.png"; // Default icon if no imageURL
-    userName.value = userData.username || "Guest"; // Default name if no name
+    userName.value = userData.username || ""; // Default name if no name
+    Name.value = userData.name || ""; // Default name if no name
 
     // check the saves
     isSaved.value =
@@ -237,23 +243,36 @@ onMounted(async () => {
 
 .card-header .user-icon {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: center; /* Align items vertically */
+  gap: 0.5rem; /* Space between the image and text */
 }
 
 .card-header .user-icon img {
-  width: 32px;
-  height: 32px;
+  width: 40px; /* Slightly larger for better alignment */
+  height: 40px;
   border-radius: 50%;
   border: 2px solid #006a71;
 }
 
-.card-header .user-icon p {
+.card-header .user-icon div {
+  display: flex;
+  flex-direction: column; /* Stack name and username vertically */
+  justify-content: center; /* Center text vertically relative to the image */
+}
+
+.card-header .user-icon .name {
   margin: 0;
   color: black;
   font-weight: 600;
+  font-size: 1.1rem; /* Adjust font size for Name */
 }
 
+.card-header .user-icon .username {
+  margin: 0;
+  color: grey;
+  font-size: 0.85rem; /* Smaller font size for username */
+  font-weight: 400; /* Lighter font weight for username */
+}
 .options-icon {
   font-size: 1.2rem;
   color: #333;

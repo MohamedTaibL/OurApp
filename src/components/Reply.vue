@@ -1,4 +1,5 @@
 <template>
+  
   <div class="reply-card" v-if ="!deleted">
     <!-- Reply Header -->
     <div class="reply-header">
@@ -9,8 +10,8 @@
         @click="router.push(`/user/${props.reply.userId}`)" 
       />
       <div class="user-info">
-        <h3 class="user-name">{{ props.reply.userName }}</h3>
-        <p class="user-full-name">{{ props.reply.Name }}</p>
+        <h3 class="user-name">{{ props.reply.Name }}</h3>
+        <p class="user-full-name">{{ props.reply.userName }}</p>
         <p class="reply-date">{{ formattedDate }}</p>
       </div>
     </div>
@@ -33,12 +34,13 @@
     <div class="reply-footer" v-if="!editMode">
       <button class="reply-button edit-button" @click="enableEdit" v-if="auth.currentUser.uid == props.reply.userId">Edit</button>
       <button class="reply-button delete-button" @click="handleDelete" v-if="auth.currentUser.uid == props.reply.userId">Delete</button>
+      <button class="reply-button visit-button" @click="router.push({ name: 'reply', params: {id : props.reply.id} })">Visit</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { defineEmits, defineProps, computed, ref } from 'vue';
+import { defineEmits, defineProps, computed, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { auth, db } from '@/Firebase/Config'; // Import your Firebase configuration
 
@@ -51,9 +53,10 @@ const props = defineProps({
   },
 });
 
+const currentRoute = useRouter().currentRoute.value.name == "discussion" ? "discussions" : "replies";
+
 const emit = defineEmits(["deleteReply"]);
 
-console.log("Props discussions id: " , props.reply.discussionId);
 
 const router = useRouter();
 const editMode = ref(false); // Tracks whether the edit mode is active
@@ -121,11 +124,20 @@ const handleDelete = async () => {
   if (confirmDelete) {
     try {
       await db.collection("replies").doc(props.reply.id).delete(); // Delete the reply from Firestore
-      const REPLIES = db.collection("discussions").doc(props.reply.discussionId)// Remove the reply ID from the discussion's replies array;
-      const replies = (await REPLIES.get()).data().comments|| [];
-      console.log("Replies man wtd" , replies);
+      const REPLIES = db.collection(currentRoute).doc(props.reply.discussionId)// Remove the reply ID from the discussion's replies array;
+      let replies = [];
+      if (currentRoute == "discussions"){
+      replies = (await REPLIES.get()).data().comments|| [];
       const updatedReplies = replies.filter((replyId) => replyId !== props.reply.id);
       await REPLIES.update({ comments: updatedReplies });
+      }
+      else{
+      replies = (await REPLIES.get()).data().responses || []; // Get the current replies array
+      const updatedReplies = replies.filter((replyId) => replyId !== props.reply.id);
+      await REPLIES.update({ responses: updatedReplies });
+      }
+      console.log("Replies man wtd" , replies);
+  
       console.log("Reply deleted successfully!");
       deleted.value = true; // Mark the reply as deleted in the UI
       
@@ -136,6 +148,11 @@ const handleDelete = async () => {
       emit("deleteReply"); // Emit an event to notify the parent component about the deletion
 
     }}}
+
+    onMounted(() => {
+      console.log("Current router : " ,currentRoute);
+      }
+    );
 </script>
 
 <style scoped>
@@ -265,5 +282,20 @@ const handleDelete = async () => {
 
 .delete-button:hover {
   background-color: #b71c1c;
+}
+
+.visit-button {
+  background-color: #007bff; /* Blue background */
+  color: white; /* White text */
+  padding: 4px 8px; /* Padding for the button */
+  font-size: 12px; /* Font size */
+  border-radius: 6px; /* Rounded corners */
+  border: none; /* Remove border */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+.visit-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
 }
 </style>

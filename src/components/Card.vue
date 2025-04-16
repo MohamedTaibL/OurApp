@@ -70,7 +70,7 @@
     <!-- Now done with printing the discussion and the reply input, we will now show the replies -->
 
     
-     <Reply v-if="replies" v-for="reply in replies" :key="reply.id" :reply="reply" :userId="reply.userId" :discussionId="props.discussion.id" @deleteReply="reload" />
+     <Reply v-if="replies" v-for="reply in replies" :key="reply.id" :reply="reply" @deleteReply="reload"/>
      <div v-else>
         <p>Loading...</p>
      </div>
@@ -261,6 +261,7 @@
       userIcon : authuser.value.imageURL,
       userName : authuser.value.username,
       discussionId: props.discussion.id,
+      responses : [],
     });
 
     
