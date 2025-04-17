@@ -6,18 +6,21 @@
     </div>
     <input v-model="discussionContent" placeholder="What's on your mind?" class="discussion-input" @click="router.push('/create')" />
   </div>
-  <div class="discussions-list">
+  <div class="discussions-list" v-if="discussions.length > 0">
     <DiscussionCard
       v-for="discussion in discussions"
       :key="discussion.id"
       :discussion="discussion"
     />
   </div>
+  <div v-else class="no-discussions-message">
+    <p>No discussions found :(.</p>
+  </div>
   </div>
 </template>
 
 <script setup>
-import { ref , onMounted, defineProps } from 'vue';
+import { ref , onMounted, defineProps , watch} from 'vue';
 import { useRouter } from 'vue-router';
 import { db, auth } from '@/Firebase/Config';
 import DiscussionCard from '@/components/DiscussionCard.vue';
@@ -66,26 +69,24 @@ auth.onAuthStateChanged(async (user) => {
   }
 });
 
+//
 const fetchDiscussions = async () => {
   const discussionsRef = db.collection('discussions').orderBy('date', 'desc');
   const snapshot = await discussionsRef.get();
-  // in case the userId is passed we want to filter the discussions by the userId
-  discussions.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // give it both the id and the data
-  if (props.userId) {
-    discussions.value = discussions.value.filter((discussion) => discussion.userId === props.userId);
-  }
-  if (props.saves) {
-    // get the saves from the db using the userId
-    const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
-    if (userDoc.exists) {
-      const userData = userDoc.data();
-      if (userData.savedPosts) {
-        discussions.value = discussions.value.filter((discussion) => userData.savedPosts.includes(discussion.id));
-      }
-    }
-  }
-  if (props.search){
-    /*
+  let filtered = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // give it both the id and the data
+
+if (props.userId) {
+  filtered = filtered.filter(d => d.userId === props.userId);
+}
+
+if (props.saves) {
+  const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
+  const saved = userDoc.data().savedPosts || [];
+  filtered = filtered.filter(d => saved.includes(d.id));
+}
+
+if (props.search) {
+  /*
     this will take the format :
     category: array,
     subcategory: array,
@@ -94,35 +95,60 @@ const fetchDiscussions = async () => {
     startDate: date,
     endDate: date,
     userId: string
-    */
-    if (props.search.category && props.search.category.length > 0) {
-      discussions.value = discussions.value.filter((discussion) => props.search.category.includes(discussion.category));
-    }
-    if (props.search.subcategory && props.search.subcategory.length > 0) {
-      discussions.value = discussions.value.filter((discussion) => props.search.subcategory.includes(discussion.subcategory));
-    }
-    if (props.search.title && props.search.title.length > 0) {
-      discussions.value = discussions.value.filter((discussion) => discussion.title.toLowerCase().includes(props.search.title.toLowerCase()));
-    }
-    if (props.search.content && props.search.content.length > 0) {
-      discussions.value = discussions.value.filter((discussion) => discussion.content.toLowerCase().includes(props.search.content.toLowerCase()));
-    }
-    if (props.search.startDate && props.search.startDate.length > 0) {
-      discussions.value = discussions.value.filter((discussion) => discussion.date >= props.search.startDate);
-    }
-    if (props.search.endDate && props.search.endDate.length > 0) {
-      discussions.value = discussions.value.filter((discussion) => discussion.date <= props.search.endDate);
-    }
-    if (props.search.userId && props.search.userId.length > 0) {
-      discussions.value = discussions.value.filter((discussion) => discussion.userId === props.search.userId);
-    }
-  } 
-  // to add the rest of the filtering later
-};
+  */
+  const { category, subcategory, title, content, startDate, endDate, userId } = props.search;
+  console.log('search', props.search);
+
+  if (category?.length) {
+    filtered = filtered.filter(d =>
+      Array.isArray(d.category)
+        ? d.category.every(cat => category.includes(cat))
+        : category.includes(d.category)
+    );
+  }
+  if (subcategory?.length) {
+    filtered = filtered.filter(d =>
+      Array.isArray(d.subcategory)
+        ? d.subcategory.every(sub => subcategory.includes(sub))
+        : subcategory.includes(d.subcategory)
+    );
+  }
+  
+  if (title && !content) {
+    filtered = filtered.filter(d => d.title?.toLowerCase().includes(title.toLowerCase()));
+  }
+  if (content && !title) {
+    filtered = filtered.filter(d => d.content?.toLowerCase().includes(content.toLowerCase()));
+  }
+  if (title && content) {
+    filtered = filtered.filter(d => d.title?.toLowerCase().includes(title.toLowerCase()) || d.content?.toLowerCase().includes(content.toLowerCase()));
+  }
+  if (startDate) {
+    filtered = filtered.filter(d => d.date?.toDate() >= new Date(startDate));
+  }
+  if (endDate) {
+    filtered = filtered.filter(d => d.date?.toDate() <= new Date(endDate));
+  }
+  if (userId) {
+    filtered = filtered.filter(d => d.userId === userId);
+  }
+}
+
+discussions.value = filtered;
+
+}
 
 onMounted(() => {
   fetchDiscussions();
 });
+
+watch(() =>
+  props,
+  (newSearch) => {
+    fetchDiscussions();
+  },
+  {deep: true}
+);
 
 </script>
 
