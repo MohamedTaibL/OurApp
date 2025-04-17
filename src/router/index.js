@@ -25,7 +25,7 @@ const routes = [
   {
     // Page de catégorie (the id is optional)
     // if no id is provided, it will show all categories in a list like format
-    path: '/category/:id?',
+    path: '/category',
     name: 'category',
     component: () => import(/* webpackChunkName: "category" */ '../views/CategoryView.vue')
   },
