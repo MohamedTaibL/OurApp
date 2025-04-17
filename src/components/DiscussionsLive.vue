@@ -11,6 +11,7 @@
       v-for="discussion in discussions"
       :key="discussion.id"
       :discussion="discussion"
+      @deleted="fetchDiscussions"
     />
   </div>
   <div v-else class="no-discussions-message">

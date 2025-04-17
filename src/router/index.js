@@ -47,6 +47,11 @@ const routes = [
     name : 'reply',
     component : () => import(/* webpackChunkName: "reply" */ '../views/ReplyView.vue'),
 
+  },
+  {
+    path : '/admin',
+    name : 'admin',
+    component : () => import(/* webpackChunkName: "admin" */ '../views/AdminView.vue'),
   }
 ]
 
@@ -55,47 +60,39 @@ const router = createRouter({
   routes
 })
 
-let isLoggedIn = false; // Variable to track if the user is logged in
-
-
-function isAuthenticated(to, next) {
-  if (to.name !== 'sign' && !isLoggedIn) {
-    // If the user is not logged in and trying to access a protected route, redirect to sign page
-    next({ name: 'sign' });
-  } else {
-    next(); // Allow navigation to the requested route
-  }
-}
-
-function isntAuthenticated(to, next) {
-  if (to.name === 'sign' && isLoggedIn) {
-    // If the user is logged in and trying to access the sign page, redirect to home page
-    next({ name: 'home' });
-  } else {
-    next(); // Allow navigation to the requested route
-  }
-}
-
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    isLoggedIn = true; // User is logged in*
-    // take the user to the home page if he logged in
-    router.push({ name: 'home' });
-  } else {
-    isLoggedIn = false; // User is logged out
-    // take the user to the sign page if he logged out
-    router.push({ name: 'sign' });
-  }
-});
+let isLoggedIn = false;
 
 router.beforeEach((to, from, next) => {
-  if (to.name !== 'sign') {
-    isAuthenticated(to, next); // Check if the user is authenticated for non-sign routes
+  if (to.name != 'sign') {
+    if (!isLoggedIn) {
+      // If the user is not logged in and trying to access a protected route, redirect to sign page
+      next({ name: 'sign' });
+      // If the user is not an admin and trying to access the admin route, redirect to home page
+    }
+    else if (to.name === 'admin' && !auth.currentUser.admin) {
+      next({ name: 'home' });
+      console.log('You are not an admin!');
+    }
+    else {
+      next(); // Allow navigation to the requested route
+    }
   } else {
-    isntAuthenticated(to, next); // Check if the user is authenticated for sign route
+    if (to.name === 'sign' && isLoggedIn) {
+      // If the user is logged in and trying to access the sign page, redirect to home page
+      next({ name: 'home' });
+    } else {
+      next(); // Allow navigation to the requested route
+    }
   }
 });
 
 
+auth.onAuthStateChanged(async (user) => {
+  if (user) {
+    isLoggedIn = true; // User is logged in
+  } else {
+    isLoggedIn = false; // User is logged out
+  }
+});
 
 export default router

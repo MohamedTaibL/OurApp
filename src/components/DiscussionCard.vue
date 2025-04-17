@@ -10,9 +10,22 @@
         </div>
         
       </div>
-      <div class="options-icon" v-if="isCurrentUser">
+      <div class="options-icon" v-if="NotAnonymous" @click.stop="OptionsShow">
         <i class="fas fa-ellipsis-h"></i>
       </div>
+            <!-- Options Popup -->
+      <div 
+        class="options-popup" 
+        v-if="oprtions" 
+        @mouseenter="cancelHideOptions" 
+        @mouseleave="hideOptionsWithDelay"
+      >
+        <ul>
+          <li v-if="isCurrentUser" @click="confirmDelete">Delete Post</li>
+          <li @click="signalPost">Report Post</li>
+        </ul>
+      </div>
+
     </div>
 
     <!-- Card Body with the Discussion Content -->
@@ -57,12 +70,13 @@
   </div>
 
   <div v-else class="loading">
-    <p>Loading...</p>
+    <!-- make a loading animation -->
+    <div class="loading-spinner"></div>
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps, onMounted, computed } from "vue";
+import { ref, defineProps, onMounted, computed, defineEmits } from "vue";
 import { useRouter } from "vue-router";
 import { db, auth } from "@/Firebase/Config";
 
@@ -101,9 +115,15 @@ const Name = ref("");
 const isLiked = ref(false);
 const isSaved = ref(false);
 const loading = ref(true); // Loading state for user data
+const oprtions = ref(false); // Options state for the user
 const isCurrentUser = computed(
   () => auth.currentUser?.uid === props.discussion.userId
 );
+const NotAnonymous = computed(
+  () => auth.currentUser && !auth.currentUser.isAnonymous
+);
+const emit = defineEmits(["deleted"]);
+
 
 const formattedDate = computed(() => {
   if (!props.discussion.date?.seconds) return "";
@@ -114,6 +134,48 @@ const formattedDate = computed(() => {
     day: "numeric",
   });
 });
+
+
+let hideTimeout = null;
+
+const OptionsShow = () => {
+  oprtions.value = true;
+};
+
+const hideOptionsWithDelay = () => {
+  hideTimeout = setTimeout(() => {
+    oprtions.value = false;
+  }, 300); // Delay to allow hover
+};
+
+const cancelHideOptions = () => {
+  clearTimeout(hideTimeout);
+};
+
+const confirmDelete = async () => {
+  const confirmed = confirm("Are you sure you want to delete this post?");
+  if (confirmed) {
+    await db.collection("discussions").doc(props.discussion.id).delete();
+    alert("Post deleted.");
+    emit("deleted", props.discussion.id); // Emit the event to parent component
+  }
+};
+
+const signalPost = async () => {
+  const userId = auth.currentUser?.uid;
+  if (!userId) return alert("You must be logged in to report a post.");
+
+  await db
+    .collection("discussions")
+    .doc(props.discussion.id)
+    .update({
+      signals: [...(props.discussion.signals || []), { userId, type: "Reported" }],
+    });
+
+  alert("Post reported.");
+  oprtions.value = false;
+};
+
 
 const getTheUserIconandName = async () => {
   const doc = await db.collection("users").doc(props.discussion.userId).get();
@@ -220,6 +282,55 @@ onMounted(async () => {
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
 
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #426d8a; /* Blue */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.options-popup {
+  position: absolute;
+  right: 1rem;
+  top: 2.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  padding: 0.5rem 0;
+  width: 150px;
+  transition: opacity 0.3s ease;
+}
+
+.options-popup ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.options-popup li {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #333;
+  transition: background-color 0.2s;
+}
+
+.options-popup li:hover {
+  background-color: #f2f2f2;
+}
+
 .card-container {
   display: flex;
   flex-direction: column;
@@ -239,6 +350,7 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  position: relative;
 }
 
 .card-header .user-icon {
