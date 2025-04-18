@@ -1,58 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import { auth } from '@/Firebase/Config'; // Import Firebase authentication
+import { auth, db } from '@/Firebase/Config'
 
 const routes = [
-  { 
-    // page d'accueil
-    path: '/',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    // Page de connexion/inscription 
-    path: '/sign',
-    name: 'sign',
-    component: () => import(/* webpackChunkName: "sign" */ '../views/SignView.vue')
-  },
-  {
-    // Page de profil
-    // if no id is provided, it will show the current user's profile by rerouting
-    path: '/user/:id?',
-    name: 'user',
-    component: () => import(/* webpackChunkName: "profile" */ '../views/ProfileView.vue')
-  },
-  {
-    // Page de catégorie (the id is optional)
-    // if no id is provided, it will show all categories in a list like format
-    path: '/category',
-    name: 'category',
-    component: () => import(/* webpackChunkName: "category" */ '../views/CategoryView.vue')
-  },
-  {
-    // Page de discussion
-    path: '/discussion/:id',
-    name: 'discussion',
-    component: () => import(/* webpackChunkName: "discussion" */ '../views/DiscussionView.vue'),
-    props: true // Pass route params as props to the component
-  },
-  {
-    // Page de création de discussion 
-    path: '/create',
-    name: 'create',
-    component: () => import(/* webpackChunkName: "create" */ '../views/CreateView.vue')
-  },
-  {
-    path : '/reply/:id',
-    name : 'reply',
-    component : () => import(/* webpackChunkName: "reply" */ '../views/ReplyView.vue'),
-
-  },
-  {
-    path : '/admin',
-    name : 'admin',
-    component : () => import(/* webpackChunkName: "admin" */ '../views/AdminView.vue'),
-  }
+  { path: '/', name: 'home', component: HomeView },
+  { path: '/sign', name: 'sign', component: () => import('../views/SignView.vue') },
+  { path: '/user/:id?', name: 'user', component: () => import('../views/ProfileView.vue') },
+  { path: '/category', name: 'category', component: () => import('../views/CategoryView.vue') },
+  { path: '/discussion/:id', name: 'discussion', component: () => import('../views/DiscussionView.vue'), props: true },
+  { path: '/create', name: 'create', component: () => import('../views/CreateView.vue') },
+  { path: '/reply/:id', name: 'reply', component: () => import('../views/ReplyView.vue') },
+  { path: '/admin', name: 'admin', component: () => import('../views/AdminView.vue') },
 ]
 
 const router = createRouter({
@@ -60,39 +18,52 @@ const router = createRouter({
   routes
 })
 
-let isLoggedIn = false;
+// Track user state
+let isLoggedIn = false
+let isAdmin = false
+let isBlocked = false // 👈 Track blocked status
 
+// Navigation guard
 router.beforeEach((to, from, next) => {
-  if (to.name != 'sign') {
+  if (to.name !== 'sign') {
     if (!isLoggedIn) {
-      // If the user is not logged in and trying to access a protected route, redirect to sign page
-      next({ name: 'sign' });
-      // If the user is not an admin and trying to access the admin route, redirect to home page
-    }
-    else if (to.name === 'admin' && !auth.currentUser.admin) {
-      next({ name: 'home' });
-      console.log('You are not an admin!');
-    }
-    else {
-      next(); // Allow navigation to the requested route
+      next({ name: 'sign' })
+    } else if (isBlocked && to.name !== 'sign') {
+      alert("you are blocked, contact admins for more info")
+    } else if (to.name === 'admin' && !isAdmin) {
+      next({ name: 'home' })
+      console.log('You are not an admin!')
+    } else {
+      next()
     }
   } else {
-    if (to.name === 'sign' && isLoggedIn) {
-      // If the user is logged in and trying to access the sign page, redirect to home page
-      next({ name: 'home' });
+    if (isLoggedIn && !isBlocked) {
+      next({ name: 'home' })
     } else {
-      next(); // Allow navigation to the requested route
+      next()
     }
   }
-});
+})
 
-
+// Auth listener
 auth.onAuthStateChanged(async (user) => {
   if (user) {
-    isLoggedIn = true; // User is logged in
+    isLoggedIn = true
+    const userId = user.uid
+    const userDoc = await db.collection('users').doc(userId).get()
+    if (userDoc.exists) {
+      const userData = userDoc.data()
+      isAdmin = userData.isAdmin || false
+      isBlocked = userData.blocked || false // 👈 Load blocked status
+    } else {
+      isAdmin = false
+      isBlocked = false
+    }
   } else {
-    isLoggedIn = false; // User is logged out
+    isLoggedIn = false
+    isAdmin = false
+    isBlocked = false
   }
-});
+})
 
 export default router

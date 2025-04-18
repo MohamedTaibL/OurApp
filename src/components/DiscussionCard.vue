@@ -1,5 +1,5 @@
 <template>
-  <div class="card-container" v-if="!loading">
+  <div class="card-container" v-if="!loading" >
     <!-- Card Header with User Information -->
     <div class="card-header" >
       <div class="user-icon" @click.stop="goToUser">
@@ -73,12 +73,17 @@
     <!-- make a loading animation -->
     <div class="loading-spinner"></div>
   </div>
+
+  <div v-if="reporting" class="loading">
+    <ReportPost :postId="discussion.id" @close="reporting = false" />
+  </div>
 </template>
 
 <script setup>
 import { ref, defineProps, onMounted, computed, defineEmits } from "vue";
 import { useRouter } from "vue-router";
 import { db, auth } from "@/Firebase/Config";
+import ReportPost from "./ReportPost.vue";
 
 const props = defineProps({
   discussion: {
@@ -98,12 +103,6 @@ const props = defineProps({
   - date: timestamp (the date of the discussion)
   - comments: array of strings (each string is the id of the comment)
   - likes: array of strings (each string is the id of the user who liked the discussion)
-  - signals: array of objects (each object contains information about the signal type and the user who reported it)
-      Example:
-      signals: [
-          { userId: "user1", type: "NSFW" },
-          { userId: "user2", type: "Abusive" }
-      ]
 */
 // the post can also be saved by the user => need to check if it is in the user's saved
 
@@ -116,6 +115,7 @@ const isLiked = ref(false);
 const isSaved = ref(false);
 const loading = ref(true); // Loading state for user data
 const oprtions = ref(false); // Options state for the user
+const reporting = ref(false); // Reporting state for a post
 const isCurrentUser = computed(
   () => auth.currentUser?.uid === props.discussion.userId
 );
@@ -162,20 +162,8 @@ const confirmDelete = async () => {
 };
 
 const signalPost = async () => {
-  const userId = auth.currentUser?.uid;
-  if (!userId) return alert("You must be logged in to report a post.");
-
-  await db
-    .collection("discussions")
-    .doc(props.discussion.id)
-    .update({
-      signals: [...(props.discussion.signals || []), { userId, type: "Reported" }],
-    });
-
-  alert("Post reported.");
-  oprtions.value = false;
+  reporting.value = true;
 };
-
 
 const getTheUserIconandName = async () => {
   const doc = await db.collection("users").doc(props.discussion.userId).get();

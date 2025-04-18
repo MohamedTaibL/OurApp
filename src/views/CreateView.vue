@@ -62,10 +62,11 @@ async function createDiscussion() {
   };
 
   try {
-    await db.collection('discussions').add(discussionData);
+    const docRef = await db.collection('discussions').add(discussionData);
 
     alert('Discussion created!');
-    router.push('/'); // Redirect to the home page or discussions page
+    // take the user to the discussion page
+    router.push({ name: 'discussion', params: { id: docRef.id } });
   } catch (err) {
     console.error('Error:', err);
     alert('Failed to create discussion.');

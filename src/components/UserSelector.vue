@@ -1,19 +1,24 @@
 <template>
-  <div class="UserSelector" v-if="!set">
-    <div
-      class="user-card"
-      v-for="user in filteredUsers"
-      :key="user.id"
-      @click="toggleUser(user)"
-    >
-      <img :src="user.imageURL" alt="User Icon" />
-      <span>{{ user.name }}</span>
+    <div v-if="filteredUsers != 0">
+      <div class="UserSelector" v-if="!set">
+        <div
+          class="user-card"
+          v-for="user in filteredUsers"
+          :key="user.id"
+          @click="toggleUser(user)"
+        >
+          <img :src="user.imageURL" alt="User Icon" />
+          <span>{{ user.name }}</span>
+        </div>
+      </div>
+      <div v-else class="user-card" @click="toggleUser(chosenUser)" style="cursor: pointer; border: 1px solid #007bff; background-color: #e9f2ff;"> 
+        <img :src="chosenUser.imageURL" alt="User Icon" />
+        <span>{{ chosenUser.name }}</span>
+      </div>  
     </div>
-  </div>
-  <div v-else class="user-card" @click="toggleUser(chosenUser)" style="cursor: pointer; border: 1px solid #007bff; background-color: #e9f2ff;"> 
-    <img :src="chosenUser.imageURL" alt="User Icon" />
-    <span>{{ chosenUser.name }}</span>
-  </div>  
+    <div v-else class="UserSelector"> 
+      <p>No users found :(</p>
+    </div>
 </template>
 
 <script setup>
@@ -27,6 +32,11 @@ const props = defineProps({
     required: false,
     default: "",
   },
+  redirect: {
+    type: Boolean,
+    required: false,
+    default: false,
+  }
 });
 
 const users = ref([]);
@@ -63,6 +73,10 @@ const filteredUsers = computed(() => {
 });
 
 const toggleUser = (user) => {
+  if (props.redirect) {
+    window.location.href = `/user/${user.id}`;
+    return;
+  }
   if (!set.value) {
     set.value = true;
     chosenUser.value = user;
@@ -112,4 +126,16 @@ const toggleUser = (user) => {
   font-size: 0.85rem;
   color: #333;
 }
+
+.UserSelector::-webkit-scrollbar {
+  width: 6px;
+}
+.UserSelector::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+.UserSelector::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
 </style>

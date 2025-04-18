@@ -1,108 +1,143 @@
 <template>
-    <div class="card-container">
-      <!-- Card Header with User Information -->
-      <div class="card-header" >
-        <div class="user-icon" @click.stop="goToUser">
-          <img :src="userIcon" alt="User Icon" />
-          <p>{{ userName }}</p>
+  <div class="card-container">
+    <!-- Card Header with User Information -->
+    <div class="card-header">
+      <div class="user-icon" @click.stop="goToUser">
+        <img :src="userIcon" alt="User Icon" />
+        <p>{{ userName }}</p>
+      </div>
+      <div class="options-icon" v-if="!auth.currentUser?.isAnonymous" @click.stop="OptionsShow">
+        <i class="fas fa-ellipsis-h"></i>
+      </div>
+
+      <div 
+        class="options-popup" 
+        v-if="oprtions" 
+        @mouseenter="cancelHideOptions" 
+        @mouseleave="hideOptionsWithDelay"
+      >
+        <ul>
+          <li v-if="isCurrentUser" @click="confirmDelete">Delete Post</li>
+          <li v-if="isCurrentUser" @click="editPost">Edit Post</li>
+          <li @click="signalPost">Report Post</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Card Body with the Discussion Content -->
+    <div class="card-body">
+      <!-- Categories & Subcategories -->
+      <div class="discussion-tags" v-if="hasTags">
+        <div
+          class="tag"
+          v-for="category in discussion.category"
+          :key="category"
+        >
+          #{{ category }}
         </div>
-        <div class="options-icon" v-if="isCurrentUser">
-          <i class="fas fa-ellipsis-h"></i>
+        <div
+          class="subtag"
+          v-for="subcategory in discussion.subcategory"
+          :key="subcategory"
+        >
+          • {{ subcategory }}
         </div>
       </div>
-  
-      <!-- Card Body with the Discussion Content -->
-      <div class="card-body">
-        <!-- Categories & Subcategories -->
-        <div class="discussion-tags" v-if="hasTags">
-          <div class="tag" v-for="category in discussion.category" :key="category">
-            #{{ category }}
-          </div>
-          <div class="subtag" v-for="subcategory in discussion.subcategory" :key="subcategory">
-            • {{ subcategory }}
-          </div>
-        </div>
-  
-        <h2 class="discussion-title">{{ discussion.title }}</h2>
-        <p class="discussion-description">
-          {{ discussion.content}}...
-        </p>
-        <p class="discussion-date">{{ formattedDate }}</p>
+
+      <h2 class="discussion-title">{{ discussion.title }}</h2>
+
+      <p class="discussion-description" v-if="!editing">{{ content }}</p>
+      <div class="edit-discussion" v-else>
+        <textarea v-model="editedContent" placeholder="Edit your discussion..."></textarea>
+        <button @click="saveEdits">Save</button>
       </div>
-  
-      <!-- Card Footer -->
-      <hr style="width: 100%; border: 1px solid #ccc; margin: 0.5rem 0;" />
-      <div class="card-footer">
-        <div class="action" @click.stop="toggleLike">
-          <i :class="isLiked ? 'fas fa-heart liked' : 'far fa-heart'"></i>
-          <span>{{ discussion.likes.length }}</span>
-        </div>
-        <div class="action" @click.stop="goToDiscussion">
-          <i class="far fa-comment" ></i>
-          <span>{{ discussion.comments.length}}</span>
-        </div>
-        <div class="action" @click.stop="toggleSave">
-          <i :class="isSaved ? 'fas fa-bookmark saved' : 'far fa-bookmark'" v-if="!auth.currentUser.isAnonymous"></i>
-        </div>
+      
+      <p class="discussion-date">{{ formattedDate }}</p>
+      <p class="discussion-date" v-if="discussion.isEdited || edited">edited</p>
     </div>
 
+    <!-- Card Footer -->
+    <hr style="width: 100%; border: 1px solid #ccc; margin: 0.5rem 0" />
+    <div class="card-footer">
+      <div class="action" @click.stop="toggleLike">
+        <i :class="isLiked ? 'fas fa-heart liked' : 'far fa-heart'"></i>
+        <span>{{ discussion.likes.length }}</span>
+      </div>
+      <div class="action" @click.stop="goToDiscussion">
+        <i class="far fa-comment"></i>
+        <span>{{ discussion.comments.length }}</span>
+      </div>
+      <div class="action" @click.stop="toggleSave">
+        <i
+          :class="isSaved ? 'fas fa-bookmark saved' : 'far fa-bookmark'"
+          v-if="!auth.currentUser.isAnonymous"
+        ></i>
+      </div>
     </div>
+  </div>
 
-    <div>
-    <div class="discussion-creator" v-if="!auth.currentUser.isAnonymous && (!props.userId || props.userId == auth.currentUser.uid)">
-        <div class="user-info">
-            <img v-if="userIcon" :src="userIcon" alt="User Icon" class="user-icon" />
-        </div>
-        <textarea 
-    v-model="replyContent" 
-    placeholder="What's on your mind?" 
-    class="discussion-textarea">
-  </textarea>
+  <div>
+    <div
+      class="discussion-creator"
+      v-if="
+        !auth.currentUser.isAnonymous &&
+        (!props.userId || props.userId == auth.currentUser.uid)
+      "
+    >
+      <div class="user-info">
+        <img
+          v-if="userIcon"
+          :src="userIcon"
+          alt="User Icon"
+          class="user-icon"
+        />
+      </div>
+      <textarea
+        v-model="replyContent"
+        placeholder="What's on your mind?"
+        class="discussion-textarea"
+      >
+      </textarea>
 
-        <button class="post-button" @click="handlePost">Post</button>
+      <button class="post-button" @click="handlePost">Post</button>
     </div>
-
-
-
-
-
 
     <!-- Now done with printing the discussion and the reply input, we will now show the replies -->
 
-    
-     <Reply v-if="replies" v-for="reply in replies" :key="reply.id" :reply="reply" @deleteReply="reload"/>
-     <div v-else>
-        <p>Loading...</p>
-     </div>
-    
+    <Reply
+      v-if="replies"
+      v-for="reply in replies"
+      :key="reply.id"
+      :reply="reply"
+      @deleteReply="reload"
+    />
+    <div v-else>
+      <p>Loading...</p>
+    </div>
+  </div>
+  <div v-if="reporting" class="loading">
+    <ReportPost :postId="discussion.id" @close="reporting = false" />
+  </div>
+</template>
 
+<script setup>
+import { ref, defineProps, onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
+import { db, auth } from "@/Firebase/Config";
+import ReportPost  from "./ReportPost.vue";
+import Reply from "./Reply.vue";
+const props = defineProps({
+  discussion: {
+    type: Object,
+    required: true,
+  },
+});
 
+const emit = defineEmits(["remount"]);
 
-
-
-
-    
-</div>
-
-    
-  </template>
-  
-  <script setup>
-  import { ref, defineProps, onMounted, computed } from "vue";
-  import { useRouter } from "vue-router";
-  import { db, auth } from "@/Firebase/Config";
-  import Reply from "./Reply.vue";  
-  const props = defineProps({
-    discussion: {
-      type: Object,
-      required: true,
-    },
-  });
-
-  const emit = defineEmits(["remount"]);
-  
-  // discussion is passed with :
-  /*
+// discussion is passed with :
+/*
     - id: string (auto generated by firebase)
     - userId: string (the id of the user who created the discussion)
     - Title: string (the title of the discussion)
@@ -119,194 +154,245 @@
             { userId: "user2", type: "Abusive" }
         ]
   */
-  // the post can also be saved by the user => need to check if it is in the user's saved
+// the post can also be saved by the user => need to check if it is in the user's saved
+
+// Use router to navigate to the discussion detail page
+const router = useRouter();
+const userIcon = ref("https://cdn-icons-png.flaticon.com/512/149/149071.png");
+const userName = ref("");
+const isLiked = ref(false);
+const isSaved = ref(false);
+const replyContent = ref("");
+const replies = ref([]);
+const reporting = ref(false);
+const editing = ref(false);
+const editedContent = ref("");
+const edited  = ref(false);
+const oprtions = ref(false);
+const content = ref("");
+const isCurrentUser = computed(
+  () => auth.currentUser?.uid === props.discussion.userId
+);
+const authuser = ref({});
+const commentNum = ref(props.discussion.comments.length);
+const formattedDate = computed(() => {
+  if (!props.discussion.date?.seconds) return "";
+  const dateObj = new Date(props.discussion.date.seconds * 1000);
+  return dateObj.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+});
+
+const OptionsShow = () => {
+  oprtions.value = true;
+};
+
+const editPost = async () => {
+  editing.value = true;
+}
+
+const saveEdits = async () => {
+  editing.value = false;
+  const docRef = db.collection("discussions").doc(props.discussion.id);
+  await docRef.update({ content: editedContent.value , isEdited: true});
   
-  // Use router to navigate to the discussion detail page
-  const router = useRouter();
-  const userIcon = ref("https://cdn-icons-png.flaticon.com/512/149/149071.png");
-  const userName = ref("");
-  const isLiked = ref(false);
-  const isSaved = ref(false);
-  const replyContent = ref("");
-  const replies = ref([]);
-  const isCurrentUser = computed(
-    () => auth.currentUser?.uid === props.discussion.userId
+  content.value = editedContent.value;
+  edited.value = true;
+}
+
+const confirmDelete = async () => {
+  const confirmed = confirm("Are you sure you want to delete this post?");
+  if (confirmed) {
+    await db.collection("discussions").doc(props.discussion.id).delete();
+    alert("Post deleted.");
+    router.push("/");
+  }
+};
+
+const signalPost = async () => {
+  reporting.value = true;
+};
+
+const getTheUserIconandName = async () => {
+  const doc = await db.collection("users").doc(props.discussion.userId).get();
+  if (doc.exists) {
+    const userData = doc.data();
+    userIcon.value =
+      userData.imageURL ||
+      "https://cdn-icons-png.flaticon.com/512/149/149071.png"; // Default icon if no imageURL
+    userName.value = userData.username || "Guest"; // Default name if no name
+
+    // check the saves
+    isSaved.value =
+      userData.saved && userData.saved.includes(props.discussion.id);
+  }
+};
+
+const hasTags = computed(() => {
+  return (
+    props.discussion.category?.length > 0 ||
+    props.discussion.subcategory?.length > 0
   );
-  const authuser = ref({})
-  const commentNum = ref(props.discussion.comments.length);
-  const formattedDate = computed(() => {
-    if (!props.discussion.date?.seconds) return "";
-    const dateObj = new Date(props.discussion.date.seconds * 1000);
-    return dateObj.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  });
-  
-  const getTheUserIconandName = async () => {
-    const doc = await db.collection("users").doc(props.discussion.userId).get();
-    if (doc.exists) {
-      const userData = doc.data();
-      userIcon.value =
-        userData.imageURL ||
-        "https://cdn-icons-png.flaticon.com/512/149/149071.png"; // Default icon if no imageURL
-      userName.value = userData.username || "Guest"; // Default name if no name
-  
-      // check the saves
-      isSaved.value =
-        userData.saved && userData.saved.includes(props.discussion.id);
-    }
-  };
-  
-  const hasTags = computed(() => {
-    return (props.discussion.category?.length > 0 || props.discussion.subcategory?.length > 0);
-  });
-  
-  const toggleLike = async () => {
-    const userId = auth.currentUser?.uid;
-    if (!userId) return alert("You must be logged in to like posts.");
-  
-    const likes = props.discussion.likes || [];
-    if (likes.includes(userId)) {
-      // Unlike the post
-      await db
-        .collection("discussions")
-        .doc(props.discussion.id)
-        .update({
-          likes: likes.filter((id) => id !== userId),
-        });
-      isLiked.value = false;
-      //update the props.discussion.likes
-      props.discussion.likes = likes.filter((id) => id !== userId);
+});
+
+const toggleLike = async () => {
+  const userId = auth.currentUser?.uid;
+  if (!userId) return alert("You must be logged in to like posts.");
+
+  const likes = props.discussion.likes || [];
+  if (likes.includes(userId)) {
+    // Unlike the post
+    await db
+      .collection("discussions")
+      .doc(props.discussion.id)
+      .update({
+        likes: likes.filter((id) => id !== userId),
+      });
+    isLiked.value = false;
+    //update the props.discussion.likes
+    props.discussion.likes = likes.filter((id) => id !== userId);
+  } else {
+    // Like the post
+    await db
+      .collection("discussions")
+      .doc(props.discussion.id)
+      .update({
+        likes: [...likes, userId],
+      });
+    isLiked.value = true;
+    //update the props.discussion.likes
+    props.discussion.likes = [...likes, userId];
+  }
+};
+
+const toggleSave = async () => {
+  const userId = auth.currentUser?.uid;
+  if (!userId) return alert("You must be logged in to save posts.");
+
+  const userDoc = await db.collection("users").doc(userId).get();
+  const savedPosts = userDoc.data()?.savedPosts || [];
+  if (savedPosts.includes(props.discussion.id)) {
+    // Unsave the post
+    await db
+      .collection("users")
+      .doc(userId)
+      .update({
+        savedPosts: savedPosts.filter((id) => id !== props.discussion.id),
+      });
+    isSaved.value = false;
+  } else {
+    // Save the post
+    await db
+      .collection("users")
+      .doc(userId)
+      .update({
+        savedPosts: [...savedPosts, props.discussion.id],
+      });
+    isSaved.value = true;
+  }
+};
+
+const goToDiscussion = () => {
+  router.push({ name: "discussion", params: { id: props.discussion.id } });
+};
+
+const goToUser = () => {
+  router.push({ name: "user", params: { id: props.discussion.userId } });
+};
+
+const getUserData = async () => {
+  const userId = auth.currentUser.uid;
+  if (userId) {
+    const userDoc = await db.collection("users").doc(userId).get();
+    if (userDoc.exists) {
+      authuser.value = userDoc.data();
+      console.log("User data:", authuser.value);
     } else {
-      // Like the post
-      await db
-        .collection("discussions")
-        .doc(props.discussion.id)
-        .update({
-          likes: [...likes, userId],
-        });
-      isLiked.value = true;
-      //update the props.discussion.likes
-      props.discussion.likes = [...likes, userId];
+      console.log("No such document!");
     }
-  
-  };
-  
-  const toggleSave = async () => {
-    const userId = auth.currentUser?.uid;
-    if (!userId) return alert("You must be logged in to save posts.");
-  
+  } else {
+    console.log("No user is signed in.");
+  }
+};
+
+const handlePost = async () => {
+  //I want to add the reply to the replies collection and save its id on a const variable ReplyId
+  const replyRef = db.collection("replies").doc();
+  const replyId = replyRef.id;
+  await replyRef.set({
+    content: replyContent.value,
+    date: new Date(),
+    userId: auth.currentUser.uid,
+    Name: authuser.value.name,
+    userIcon: authuser.value.imageURL,
+    userName: authuser.value.username,
+    discussionId: props.discussion.id,
+    responses: [],
+  });
+
+  //Then I want to add the replyId to the discussion replies array
+  await db
+    .collection("discussions")
+    .doc(props.discussion.id)
+    .update({
+      comments: [...props.discussion.comments, replyId],
+    });
+
+  replyContent.value = "";
+  props.discussion.comments = (
+    await db.collection("discussions").doc(props.discussion.id).get()
+  ).data().comments;
+
+  emit ("reload");
+};
+
+let hideTimeout = null;
+
+const cancelHideOptions = () => {
+  clearTimeout(hideTimeout);
+};
+
+const hideOptionsWithDelay = () => {
+  hideTimeout = setTimeout(() => {
+    oprtions.value = false;
+  }, 300); // Delay to allow hover
+};
+
+const reload = async () => {
+  props.discussion.comments = (
+    await db.collection("discussions").doc(props.discussion.id).get()
+  ).data().comments;
+  console.log("RELOAD ACTUALLY WORKING");
+};
+onMounted(async () => {
+  content.value = props.discussion.content;
+  await getTheUserIconandName();
+  await getUserData();
+  const userId = auth.currentUser?.uid;
+  if (userId) {
+    isLiked.value = props.discussion.likes.includes(userId);
+
     const userDoc = await db.collection("users").doc(userId).get();
     const savedPosts = userDoc.data()?.savedPosts || [];
-    if (savedPosts.includes(props.discussion.id)) {
-      // Unsave the post
-      await db
-        .collection("users")
-        .doc(userId)
-        .update({
-          savedPosts: savedPosts.filter((id) => id !== props.discussion.id),
-        });
-      isSaved.value = false;
-    } else {
-      // Save the post
-      await db
-        .collection("users")
-        .doc(userId)
-        .update({
-          savedPosts: [...savedPosts, props.discussion.id],
-        });
-      isSaved.value = true;
-    }
-  };
-  
-  const goToDiscussion = () => {
-    router.push({ name: "discussion", params: { id: props.discussion.id } });
-  };
-  
-  const goToUser = () => {
-    router.push({ name: "user", params: { id: props.discussion.userId } });
-  };
-  
-
-
-
-  const getUserData = async () => {
-    const userId = auth.currentUser.uid;
-    if (userId) {
-      const userDoc = await db.collection("users").doc(userId).get();
-      if (userDoc.exists) {
-        authuser.value = userDoc.data();
-        console.log("User data:", authuser.value);
-      } else {
-        console.log("No such document!");
-      }
-    } else {
-      console.log("No user is signed in.");
-    }
-
+    isSaved.value = savedPosts.includes(props.discussion.id);
   }
 
+  // Fetch replies for the discussion
+  const repliesRef = db
+    .collection("replies")
+    .where("discussionId", "==", props.discussion.id);
+  const snapshot = await repliesRef.get();
+  replies.value = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  console.log("Replies data:", replies.value);
+});
+</script>
 
-  const handlePost = async() =>{
-    //I want to add the reply to the replies collection and save its id on a const variable ReplyId
-    const replyRef = db.collection("replies").doc();
-    const replyId = replyRef.id;
-    await replyRef.set({
-      content: replyContent.value,
-      date: new Date(),
-      userId: auth.currentUser.uid,
-      Name : authuser.value.name,
-      userIcon : authuser.value.imageURL,
-      userName : authuser.value.username,
-      discussionId: props.discussion.id,
-      responses : [],
-    });
+<style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
 
-    
-    //Then I want to add the replyId to the discussion replies array
-    await db.collection("discussions").doc(props.discussion.id).update({
-      comments: [...props.discussion.comments, replyId],
-
-    });
-
-    replyContent.value = "";
-    props.discussion.comments = (await (db.collection("discussions").doc(props.discussion.id)).get()).data().comments;
-    emit("remount"); // Emit the remount event to refresh the discussion view
-    
-
-  }
-
-  const reload = async () =>{
-    props.discussion.comments = (await (db.collection("discussions").doc(props.discussion.id)).get()).data().comments;
-    console.log("RELOAD ACTUALLY WORKING");
-  }
-  onMounted(async () => {
-    await getTheUserIconandName();
-    await getUserData();
-    const userId = auth.currentUser?.uid;
-    if (userId) {
-      isLiked.value = props.discussion.likes.includes(userId);
-  
-      const userDoc = await db.collection("users").doc(userId).get();
-      const savedPosts = userDoc.data()?.savedPosts || [];
-      isSaved.value = savedPosts.includes(props.discussion.id);
-    }
-
-
-    // Fetch replies for the discussion
-    const repliesRef = db.collection("replies").where("discussionId", "==", props.discussion.id);
-    const snapshot = await repliesRef.get();
-    replies.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    console.log("Replies data:", replies.value);
-  });
-  </script>
-  
-  <style scoped>
-  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
-  
-  .card-container {
+.card-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -319,132 +405,133 @@
   font-family: "Poppins", sans-serif;
   cursor: pointer;
 }
-  
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  
-  .card-header .user-icon {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .card-header .user-icon img {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 2px solid #006a71;
-  }
-  
-  .card-header .user-icon p {
-    margin: 0;
-    color: black;
-    font-weight: 600;
-  }
-  
-  .options-icon {
-    font-size: 1.2rem;
-    color: #333;
-    cursor: pointer;
-  }
-  
-  .card-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #333;
-    padding-top: 0.5rem;
-  }
-  
-  .card-body .discussion-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #006a71;
-  }
-  
-  .card-body .discussion-description {
-    font-size: 1rem;
-    color: #333;
-  }
-  
-  .card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1rem;
-  }
-  
-  .action {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-  }
-  
-  .action i {
-    font-size: 1.2rem;
-    color: #333;
-  }
-  
-  .action i.liked {
-    color: #e63946;
-  }
-  
-  .action i.saved {
-    color: #006a71;
-  }
-  
-  .action span {
-    font-size: 1rem;
-    color: #333;
-  }
-  
-  .discussion-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.75rem;
-    justify-content: center;
-  }
-  
-  .tag,
-  .subtag {
-    background-color: #d8f3dc;
-    padding: 0.3rem 0.6rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    color: #1b4332;
-    font-weight: 500;
-  }
-  
-  .subtag {
-    background-color: #f1f1f1;
-    color: #333;
-  }
-  
-  .read-more {
-    color: #006a71;
-    cursor: pointer;
-    font-weight: 600;
-  }
-  .read-more:hover {
-    text-decoration: underline;
-  }
-  
-  .discussion-date {
-    font-size: 0.85rem;
-    color: #666;
-    margin-top: 0.5rem;
-    text-align: center;
-  }
 
-  /* Import Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-.discussion-container{
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.card-header .user-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-header .user-icon img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #006a71;
+}
+
+.card-header .user-icon p {
+  margin: 0;
+  color: black;
+  font-weight: 600;
+}
+
+.options-icon {
+  font-size: 1.2rem;
+  color: #333;
+  cursor: pointer;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #333;
+  padding-top: 0.5rem;
+}
+
+.card-body .discussion-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #006a71;
+}
+
+.card-body .discussion-description {
+  font-size: 1rem;
+  color: #333;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.action i {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.action i.liked {
+  color: #e63946;
+}
+
+.action i.saved {
+  color: #006a71;
+}
+
+.action span {
+  font-size: 1rem;
+  color: #333;
+}
+
+.discussion-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  justify-content: center;
+}
+
+.tag,
+.subtag {
+  background-color: #d8f3dc;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #1b4332;
+  font-weight: 500;
+}
+
+.subtag {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.read-more {
+  color: #006a71;
+  cursor: pointer;
+  font-weight: 600;
+}
+.read-more:hover {
+  text-decoration: underline;
+}
+
+.discussion-date {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* Import Google Font */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
+.discussion-container {
   height: 100%;
 }
 /* General container styling */
@@ -458,8 +545,8 @@
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   width: 800px;
-  margin: auto auto 2rem auto;
-  font-family: 'Poppins', sans-serif;
+  margin: 2rem auto;
+  font-family: "Poppins", sans-serif;
 }
 
 .user-info {
@@ -483,7 +570,7 @@
   border-radius: 8px;
   font-size: 1rem;
   resize: vertical; /* Allow the user to resize vertically */
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   transition: background 0.3s ease;
 }
 
@@ -496,8 +583,8 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.3s ease, color 0.3s ease;
-  font-family: 'Poppins', sans-serif;
-  margin-left:1rem;
+  font-family: "Poppins", sans-serif;
+  margin-left: 1rem;
 }
 
 .post-button:hover {
@@ -506,6 +593,80 @@
 }
 
 
-  
-  </style>
-  
+.options-popup {
+  position: absolute;
+  right: 1rem;
+  top: 2.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  padding: 0.5rem 0;
+  width: 150px;
+  transition: opacity 0.3s ease;
+}
+
+.options-popup ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.options-popup li {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #333;
+  transition: background-color 0.2s;
+}
+
+.options-popup li:hover {
+  background-color: #f2f2f2;
+}
+
+.edit-discussion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  margin-top: 1rem;
+  font-family: "Poppins", sans-serif;
+}
+
+.edit-discussion textarea {
+  width: Calc(100%-1.6rem-16px);
+  min-height: 100px;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  resize: vertical;
+  font-family: "Poppins", sans-serif;
+  transition: border-color 0.3s ease;
+}
+
+.edit-discussion textarea:focus {
+  outline: none;
+  border-color: #006a71;
+  box-shadow: 0 0 5px rgba(0, 106, 113, 0.3);
+}
+
+.edit-discussion button {
+  align-self: flex-end;
+  padding: 0.5rem 1.2rem;
+  background-color: #006a71;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-discussion button:hover {
+  background-color: #004e52;
+}
+
+
+</style>

@@ -1,22 +1,22 @@
 <template>
-  
-  <div class="reply-card" v-if ="!deleted">
-    <!-- Reply Header -->
-    <div class="reply-header">
-      <img 
-        :src="props.reply.userIcon" 
-        alt="User Image" 
-        class="user-image" 
-        @click="router.push(`/user/${props.reply.userId}`)" 
-      />
-      <div class="user-info">
+<!-- Wrap card structure similar to discussion card -->
+<div class="reply-card" v-if="!deleted">
+  <!-- Reply Header -->
+  <div class="reply-header">
+    <div class="user-icon" @click="router.push(`/user/${props.reply.userId}`)">
+      <img :src="props.reply.userIcon" alt="User Icon" />
+      <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start;">
         <h3 class="user-name">{{ props.reply.Name }}</h3>
-        <p class="user-full-name">{{ props.reply.userName }}</p>
-        <p class="reply-date">{{ formattedDate }}</p>
+        <p>{{ props.reply.userName }}</p>
       </div>
     </div>
+    <div class="reply-meta">
+      <p class="reply-date">{{ formattedDate }}</p>
+    </div>
+  </div>
 
-    <!-- Reply Content -->
+  <!-- Reply Body -->
+  <div class="reply-body">
     <div v-if="editMode">
       <textarea 
         v-model="editContent" 
@@ -29,14 +29,16 @@
       </div>
     </div>
     <p v-else class="reply-content">{{ props.reply.content }}</p>
-
-    <!-- Reply Footer -->
-    <div class="reply-footer" v-if="!editMode">
-      <button class="reply-button edit-button" @click="enableEdit" v-if="auth.currentUser.uid == props.reply.userId">Edit</button>
-      <button class="reply-button delete-button" @click="handleDelete" v-if="auth.currentUser.uid == props.reply.userId">Delete</button>
-      <button class="reply-button visit-button" @click="router.push({ name: 'reply', params: {id : props.reply.id} })">Visit</button>
-    </div>
   </div>
+
+  <!-- Footer Actions -->
+  <hr style="width: 100%; border: 1px solid #eee; margin: 0.5rem 0;" />
+  <div class="reply-footer" v-if="!editMode">
+    <button class="reply-button edit-button" @click="enableEdit" v-if="auth.currentUser.uid == props.reply.userId">Edit</button>
+    <button class="reply-button delete-button" @click="handleDelete" v-if="auth.currentUser.uid == props.reply.userId">Delete</button>
+    <button class="reply-button visit-button" @click="router.push({ name: 'reply', params: {id : props.reply.id} })">Visit</button>
+  </div>
+</div>
 </template>
 
 <script setup>
@@ -156,96 +158,108 @@ const handleDelete = async () => {
 </script>
 
 <style scoped>
+/* Match the discussion card look */
 .reply-card {
   background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 12px;
-  margin: 8px auto; /* Center the card horizontally */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  max-width: 600px; /* Limit the width for a more compact look */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  padding: 16px;
+  margin: 12px auto;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.2s ease;
 }
 
 .reply-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .reply-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
 }
 
-.user-image {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-  border: 2px solid #006a71;
-  cursor: pointer; /* Makes the cursor a pointer */
-}
-
-.user-info {
+.user-icon {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Align text to the left */
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.user-icon img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #006a71;
+}
+
+.user-icon p {
+  font-size: 13px;
+  color: #444;
+  margin: 0;
+}
+
+.reply-meta {
+  text-align: right;
 }
 
 .user-name {
   font-size: 14px;
-  font-weight: bold;
-  color: #333;
+  font-weight: 600;
   margin: 0;
-}
-
-.user-full-name {
-  font-size: 12px;
-  color: #555;
-  margin: 0;
+  color: #222;
 }
 
 .reply-date {
-  font-size: 10px;
-  color: #777;
-  margin: 0;
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.reply-body {
+  text-align: left;
 }
 
 .reply-content {
   font-size: 14px;
-  color: #000000;
-  line-height: 1.4;
-  margin: 8px 0;
-  word-wrap: break-word;
-  text-align: left; /* Ensure text starts at the left */
+  color: #333;
+  line-height: 1.5;
 }
 
 .edit-textarea {
   width: 100%;
   height: 80px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: 8px;
+  padding: 10px;
   font-family: 'Poppins', sans-serif;
+  border: 1px solid #ccc;
+  font-size: 14px;
   resize: none;
-  margin-bottom: 8px;
 }
 
 .edit-actions {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+  margin-top: 8px;
+}
+
+.reply-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 .reply-button {
-  padding: 4px 8px;
   font-size: 12px;
-  border-radius: 6px;
-  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  border: none;
+  transition: all 0.3s ease;
 }
 
 .save-button {
@@ -285,17 +299,12 @@ const handleDelete = async () => {
 }
 
 .visit-button {
-  background-color: #007bff; /* Blue background */
-  color: white; /* White text */
-  padding: 4px 8px; /* Padding for the button */
-  font-size: 12px; /* Font size */
-  border-radius: 6px; /* Rounded corners */
-  border: none; /* Remove border */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+  background-color: #007bff;
+  color: white;
 }
 
 .visit-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #0056b3;
 }
+
 </style>

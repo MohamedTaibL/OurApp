@@ -1,81 +1,102 @@
 <template>
-    <div class="sign-container">
-      <div class="sign-view" v-if="signup">
-        <h1>Sign Up</h1>
-        <form @submit.prevent="createUser" class="form">
-          <input type="email" placeholder="Email" v-model="email" required />
-          <input type="password" placeholder="Password" v-model="password" required />
-          <input type="password" placeholder="Confirm Password" v-model="confirmpassword" required />
-          <input type="text" placeholder="Username" v-model="username" required />
-          <input type="text" placeholder="Name" v-model="Name" required />
-          <input type="date" placeholder="Date of Birth" v-model="date" required />
-          <div class="gender-container">
-            <div>Gender:</div>
-            <label>
-                Male
-                <input type="radio" name="gender" value="male" v-model="gender"/>
-            </label>
-                <label>
-                    Female
-                    <input type="radio" name="gender" value="female" v-model="gender" />
-                </label>
-          </div>
-            <button type="submit" class="btn">Sign Up</button>
-        
-
-        </form>
-        <button @click="printLogin" class="switch-btn">Already have an account? Login!</button>
-      </div>
-      <div class="login-view" v-if="login">
-        <h1>Login</h1>
-        <form @submit.prevent="logUser" class="form">
-          <input type="email" placeholder="Email" v-model="email" required />
-          <input type="password" placeholder="Password" v-model="password" required />
-          <button type="submit" class="btn">Login</button>
-        </form>
-        <button @click="printResetPass"class="switch-btn">Forgot Password?</button>
-        <div id = "Create" >
-            <button @click="loginGuest" class="btn">Log in as <br> A Guest</button>    
-            <button @click="printSignUp" class="btn">Create A New Account</button>
+  <div class="sign-container">
+    <div class="sign-view" v-if="signup">
+      <h1>Sign Up</h1>
+      <form @submit.prevent="createUser" class="form">
+        <input type="email" placeholder="Email" v-model="email" required />
+        <input
+          type="password"
+          placeholder="Password"
+          v-model="password"
+          required
+        />
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          v-model="confirmpassword"
+          required
+        />
+        <input type="text" placeholder="Username" v-model="username" required />
+        <input type="text" placeholder="Name" v-model="Name" required />
+        <input
+          type="date"
+          placeholder="Date of Birth"
+          v-model="date"
+          required
+        />
+        <div class="gender-container">
+          <div>Gender:</div>
+          <label>
+            Male
+            <input type="radio" name="gender" value="male" v-model="gender" />
+          </label>
+          <label>
+            Female
+            <input type="radio" name="gender" value="female" v-model="gender" />
+          </label>
         </div>
-      </div>
-
-      <div>
-        <div  class="sign-view" v-if="resetpass">
-          <h1>Reset Password</h1>
-          <form @submit.prevent="resetPassword" class="form">
-            <input type="email" placeholder="Email" v-model="email" required />
-            <button type="submit" class="btn">Send Reset Link</button>
-          </form>
-          <button @click="printLogin" class="switch-btn">Back to Login</button>
-        </div>
+        <button type="submit" class="btn">Sign Up</button>
+      </form>
+      <button @click="printLogin" class="switch-btn">
+        Already have an account? Login!
+      </button>
+    </div>
+    <div class="login-view" v-if="login">
+      <h1>Login</h1>
+      <form @submit.prevent="logUser" class="form">
+        <input type="email" placeholder="Email" v-model="email" required />
+        <input
+          type="password"
+          placeholder="Password"
+          v-model="password"
+          required
+        />
+        <button type="submit" class="btn">Login</button>
+      </form>
+      <button @click="printResetPass" class="switch-btn">
+        Forgot Password?
+      </button>
+      <div id="Create">
+        <button @click="loginGuest" class="btn">
+          Log in as <br />
+          A Guest
+        </button>
+        <button @click="printSignUp" class="btn">Create A New Account</button>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { onMounted, ref } from 'vue'
-  import { db ,auth } from '@/Firebase/Config'
-  import { useRouter } from 'vue-router'
-  
-  const router = useRouter()
-  const login = ref(true)
-  const signup = ref(false)
-  const resetpass = ref(false)
-  const email = ref("")
-  const password = ref("")
-  const username = ref("")
-  const Name = ref("")
-  const confirmpassword = ref("")
-  const date = ref("")
-  const gender = ref("male")
-  const imgurl = ref("")
 
+    <div>
+      <div class="sign-view" v-if="resetpass">
+        <h1>Reset Password</h1>
+        <form @submit.prevent="resetPassword" class="form">
+          <input type="email" placeholder="Email" v-model="email" required />
+          <button type="submit" class="btn">Send Reset Link</button>
+        </form>
+        <button @click="printLogin" class="switch-btn">Back to Login</button>
+      </div>
+    </div>
+  </div>
+</template>
 
+<script setup>
+import { onMounted, ref } from "vue";
+import { db, auth } from "@/Firebase/Config";
+import { useRouter } from "vue-router";
 
-  
-  
-  async function createUser() {
+const router = useRouter();
+const login = ref(true);
+const signup = ref(false);
+const resetpass = ref(false);
+const email = ref("");
+const password = ref("");
+const username = ref("");
+const Name = ref("");
+const confirmpassword = ref("");
+const date = ref("");
+const gender = ref("male");
+const imgurl = ref("");
+
+async function createUser() {
   const isValid = await verify();
   if (!isValid) {
     console.log("Validation failed");
@@ -84,15 +105,21 @@
 
   try {
     // Create the user
-    const userCredential = await auth.createUserWithEmailAndPassword(email.value, password.value);
+    const userCredential = await auth.createUserWithEmailAndPassword(
+      email.value,
+      password.value
+    );
     const user = userCredential.user;
 
     // Send verification email
     await user.sendEmailVerification();
-    alert("A verification email has been sent to your email address. Please verify your email before logging in.");
+    alert(
+      "A verification email has been sent to your email address. Please verify your email before logging in."
+    );
 
     if (gender.value === "male") {
-      imgurl.value = "https://chaire-ux.hec.ca/wp-content/uploads/2020/05/82e8596b116c3a262653dc9bb3948b2d_managers-supervisors-el-harvey_960-960.jpeg";
+      imgurl.value =
+        "https://chaire-ux.hec.ca/wp-content/uploads/2020/05/82e8596b116c3a262653dc9bb3948b2d_managers-supervisors-el-harvey_960-960.jpeg";
     } else if (gender.value === "female") {
       imgurl.value = "https://1cms-img.imgix.net/Momo.jpg?auto=compress";
     } else {
@@ -106,8 +133,8 @@
       birthdate: date.value,
       gender: gender.value,
       email: email.value,
-      imageURL : imgurl.value,
-      saves : []
+      imageURL: imgurl.value,
+      saves: [],
     });
     console.log("User added to Firestore successfully");
 
@@ -116,13 +143,13 @@
     console.log("User signed out after sending verification email");
 
     // Reset the form and redirect to login
-    email.value = '';
-    password.value = '';
-    confirmpassword.value = '';
-    username.value = '';
-    Name.value = '';
-    date.value = '';
-    gender.value = 'male';
+    email.value = "";
+    password.value = "";
+    confirmpassword.value = "";
+    username.value = "";
+    Name.value = "";
+    date.value = "";
+    gender.value = "male";
 
     printLogin(); // Switch to the login view
   } catch (error) {
@@ -139,8 +166,7 @@
   }
 }
 
-
-  async function verify() {
+async function verify() {
   if (password.value !== confirmpassword.value) {
     alert("Passwords do not match");
     return false;
@@ -156,7 +182,10 @@
 
   try {
     // Check if the username already exists in the database
-    const querySnapshot = await db.collection("users").where("username", "==", username.value).get();
+    const querySnapshot = await db
+      .collection("users")
+      .where("username", "==", username.value)
+      .get();
     if (!querySnapshot.empty) {
       alert("Username already exists");
       return false;
@@ -169,8 +198,6 @@
   console.log("Username is available");
   return true;
 }
-  
-
 
 async function logUser() {
   try {
@@ -186,39 +213,50 @@ async function logUser() {
       return;
     }
 
+    // Fetch user data from Firestore
+    const userDoc = await db.collection("users").doc(user.uid).get();
+
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+
+      if (userData.blocked) {
+        alert("Your account has been blocked. Please contact support.");
+        await auth.signOut(); // Sign them out immediately
+        return;
+      }
+    }
+
     console.log("User logged in successfully");
-    router.push('/'); // Redirect to the home page
+    router.push('/'); // Redirect to home
   } catch (error) {
     alert("Error Logging In, verify your credentials and connection.");
-
   } finally {
     password.value = '';
   }
 }
-  onMounted(() => {
-    login.value = true
-  })
-  
-  function printLogin() {
-    login.value = true
-    signup.value = false
-    resetpass.value = false
-  }
 
+onMounted(() => {
+  login.value = true;
+});
 
-  function printSignUp() {
-    login.value = false
-    signup.value = true
-    resetpass.value = false
-  }
-  function printResetPass() {
-    login.value = false
-    signup.value = false
-    resetpass.value = true
-  }
+function printLogin() {
+  login.value = true;
+  signup.value = false;
+  resetpass.value = false;
+}
 
+function printSignUp() {
+  login.value = false;
+  signup.value = true;
+  resetpass.value = false;
+}
+function printResetPass() {
+  login.value = false;
+  signup.value = false;
+  resetpass.value = true;
+}
 
-  async function resetPassword() {
+async function resetPassword() {
   if (!email.value) {
     alert("Please enter your email address.");
     return;
@@ -230,35 +268,27 @@ async function logUser() {
   } catch (error) {
     console.error("Error sending password reset email:", error);
   } finally {
-    email.value = ""
-    router.push('/sign')
-    printLogin()
-  }}
-
-
-  async function loginGuest(){
-    try{await auth.signInAnonymously();
-    console.log("Log In anonymously!" , auth.currentUser.isAnonymous)
-    }
-    catch(error){
-        console.error("Error logging in as a guest" , error)
-
-    }
-    finally{
-        email.value=""
-        password.value=""
-        router.push('/')
-    }
-
-
+    email.value = "";
+    router.push("/sign");
+    printLogin();
   }
-  </script>
+}
 
+async function loginGuest() {
+  try {
+    await auth.signInAnonymously();
+    console.log("Log In anonymously!", auth.currentUser.isAnonymous);
+  } catch (error) {
+    console.error("Error logging in as a guest", error);
+  } finally {
+    email.value = "";
+    password.value = "";
+    router.push("/");
+  }
+}
+</script>
 
-
-  
 <style scoped>
-
 #Create {
   display: flex;
   justify-content: space-between;
@@ -267,7 +297,7 @@ async function logUser() {
   margin: 1rem 0;
   width: 100%; /* Increased width */
   max-width: 600px; /* Optional: Limit the maximum width */
-  
+
   gap: 1rem; /* Adds spacing between buttons */
 }
 
@@ -275,15 +305,13 @@ async function logUser() {
 #Create .btn {
   flex: 1; /* Ensures buttons take equal space */
   text-align: center;
-  width:50%;
+  width: 50%;
   background: #006a71;
   animation: gradientAnimation 10s ease infinite;
-
 }
 
-
 /* Import Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
 
 /* General container styling */
 .sign-container {
@@ -292,11 +320,10 @@ async function logUser() {
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background: linear-gradient(135deg, rgb(242,239 , 231), #48A6A7);
+  background: linear-gradient(135deg, rgb(242, 239, 231), #48a6a7);
   background-size: 400% 400%;
   animation: gradientAnimation 10s ease infinite;
-  font-family: 'Poppins', sans-serif;
-
+  font-family: "Poppins", sans-serif;
 }
 
 /* Gradient animation */
@@ -313,8 +340,9 @@ async function logUser() {
 }
 
 /* Form container */
-.sign-view, .login-view {
-  background:  rgba(242, 239, 231, 0.69);
+.sign-view,
+.login-view {
+  background: rgba(242, 239, 231, 0.69);
   padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -344,7 +372,7 @@ async function logUser() {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .form input:focus {
@@ -364,7 +392,7 @@ async function logUser() {
   border: none;
   border-radius: 5px;
   font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
 }
@@ -379,14 +407,14 @@ async function logUser() {
   border: none;
   color: black;
   font-size: 0.9rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   cursor: pointer;
   text-decoration: underline;
 }
 
 .switch-btn:hover {
-    color: #006a71;
-    text-decoration: none;
+  color: #006a71;
+  text-decoration: none;
 }
 
 /* Headings */
@@ -396,7 +424,6 @@ h1 {
   font-size: 1.8rem;
   font-weight: 600;
 }
-
 
 .gender-container {
   display: flex;
@@ -415,7 +442,7 @@ h1 {
 
 .gender-container div {
   font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   color: #333;
 }
 
@@ -424,7 +451,7 @@ h1 {
   align-items: center;
   gap: 0.5rem; /* Adds spacing between the label text and the radio button */
   font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   color: #333;
 }
 
@@ -432,6 +459,4 @@ h1 {
   accent-color: #006a71; /* Changes the color of the radio button */
   cursor: pointer;
 }
-
-
 </style>
